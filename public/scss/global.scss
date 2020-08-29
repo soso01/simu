@@ -1,0 +1,19 @@
+.row {
+  display: flex;
+  flex-direction: row;
+  .rowItem{
+    margin: 10;
+  }
+}
+
+.level.is-mobile .level-item:not(:last-child) {
+  margin-bottom: 0;
+  margin-right: 0;
+}
+
+.burger > p {
+  padding: 5px;
+  &:hover {
+    color: grey;
+  }
+}

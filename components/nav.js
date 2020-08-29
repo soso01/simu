@@ -1,56 +1,71 @@
-import React from 'react'
-import Link from 'next/link'
+import React, {useState} from "react"
+import Link from "next/link"
 
-const links = [
-  { href: 'https://zeit.co/now', label: 'ZEIT' },
-  { href: 'https://github.com/zeit/next.js', label: 'GitHub' },
-].map(link => ({
-  ...link,
-  key: `nav-link-${link.href}-${link.label}`,
-}))
+const nav = () => {
+  const [isBurger, setIsBurger] = useState(false)
+  return (
+    <>
+      <nav
+        className="navbar"
+        role="navigation"
+        aria-label="main navigation"
+        style={{ marginBottom: 20 }}
+      >
+        <div className="navbar-brand">
+          <a className="navbar-item">
+            <Link href="/">
+              <img
+                src="https://bulma.io/images/bulma-logo.png"
+                width="112"
+                height="28"
+              />
+            </Link>
+          </a>
 
-const Nav = () => (
-  <nav>
-    <ul>
-      <li>
-        <Link href="/">
-          <a>Home</a>
-        </Link>
-      </li>
-      {links.map(({ key, href, label }) => (
-        <li key={key}>
-          <a href={href}>{label}</a>
-        </li>
-      ))}
-    </ul>
+          <a
+            role="button"
+            className={"navbar-burger burger " + (isBurger ? "is-active" : "")}
+            aria-label="menu"
+            aria-expanded="false"
+            data-target="navbarBasicExample"
+            onClick={() => setIsBurger(!isBurger)}
+          >
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+          </a>
+        </div>
 
-    <style jsx>{`
-      :global(body) {
-        margin: 0;
-        font-family: -apple-system, BlinkMacSystemFont, Avenir Next, Avenir,
-          Helvetica, sans-serif;
-      }
-      nav {
-        text-align: center;
-      }
-      ul {
-        display: flex;
-        justify-content: space-between;
-      }
-      nav > ul {
-        padding: 4px 16px;
-      }
-      li {
-        display: flex;
-        padding: 6px 8px;
-      }
-      a {
-        color: #067df7;
-        text-decoration: none;
-        font-size: 13px;
-      }
-    `}</style>
-  </nav>
-)
+        <div id="navbarBasicExample" className="navbar-menu">
+          <div className="navbar-start">
+            <Link href="create">
+              <a className="navbar-item">만들기</a>
+            </Link>
+          </div>
 
-export default Nav
+          <div className="navbar-end">
+            <div className="navbar-item">
+              <div className="buttons">
+                <Link href="join">
+                  <a className="button is-primary">
+                    <strong>회원가입</strong>
+                  </a>
+                </Link>
+                <Link href="login">
+                  <a className="button is-light">로그인</a>
+                </Link>
+              </div>
+            </div>
+          </div>
+        </div>
+      </nav>
+      <div className={isBurger ? "burger" : "is-hidden"} style={{marginTop: -10, marginBottom:20}}>
+        <Link href="login"><p className="has-text-centered has-text-weight-semibold">로그인</p></Link>
+        <Link href="join"><p className="has-text-centered has-text-weight-semibold">회원가입</p></Link>
+        <Link href="create"><p className="has-text-centered has-text-weight-semibold">만들기</p></Link>
+      </div>
+    </>
+  )
+}
+
+export default nav
