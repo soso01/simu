@@ -1,8 +1,9 @@
 import React from "react"
+import Link from 'next/link'
 
 const Card = () => {
   return (
-    <div className="" style={{width:350, margin:20}}>
+    <div className="" style={{ width: 350, margin: 20 }}>
       <div className="column card">
         <div className="card-image">
           <figure className="image is-4by3">
@@ -13,19 +14,10 @@ const Card = () => {
           </figure>
         </div>
         <div className="card-content">
-          <div className="media">
-            <div className="media-left">
-              <figure className="image is-48x48">
-                <img
-                  src="https://bulma.io/images/placeholders/96x96.png"
-                  alt="Placeholder image"
-                />
-              </figure>
-            </div>
-            <div className="media-content">
-              <p className="title is-4">John Smith</p>
-              <p className="subtitle is-6">@johnsmith</p>
-            </div>
+          <div className="content">
+            <p className="title is-4">
+              엘사와 학교가기
+            </p>
           </div>
 
           <div className="content">
@@ -37,11 +29,14 @@ const Card = () => {
           </div>
         </div>
 
-  <footer class="card-footer">
-    <a href="#" class="card-footer-item">Save</a>
-    <a href="#" class="card-footer-item">Edit</a>
-    <a href="#" class="card-footer-item">Delete</a>
-  </footer>
+        <footer className="card-footer">
+          <Link href="game">
+            <a className="card-footer-item">시작하기</a>
+          </Link>
+          <Link href="comment">
+            <a className="card-footer-item">댓글보기</a>
+          </Link>
+        </footer>
       </div>
     </div>
   )

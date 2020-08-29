@@ -1,16 +1,11 @@
-import React, {useState} from "react"
+import React, { useState } from "react"
 import Link from "next/link"
 
 const nav = () => {
   const [isBurger, setIsBurger] = useState(false)
   return (
     <>
-      <nav
-        className="navbar"
-        role="navigation"
-        aria-label="main navigation"
-        style={{ marginBottom: 20 }}
-      >
+      <nav className="navbar" role="navigation" aria-label="main navigation">
         <div className="navbar-brand">
           <a className="navbar-item">
             <Link href="/">
@@ -59,10 +54,40 @@ const nav = () => {
           </div>
         </div>
       </nav>
-      <div className={isBurger ? "burger" : "is-hidden"} style={{marginTop: -10, marginBottom:20}}>
-        <Link href="login"><p className="has-text-centered has-text-weight-semibold">로그인</p></Link>
-        <Link href="join"><p className="has-text-centered has-text-weight-semibold">회원가입</p></Link>
-        <Link href="create"><p className="has-text-centered has-text-weight-semibold">만들기</p></Link>
+      <div
+        className={isBurger ? "burger" : "is-hidden"}
+        style={{ marginTop: 10, marginBottom: 20 }}
+      >
+        <Link href="login">
+          <p
+            className="has-text-centered has-text-weight-semibold"
+            onClick={() => {
+              setIsBurger(!isBurger)
+            }}
+          >
+            로그인
+          </p>
+        </Link>
+        <Link href="join">
+          <p
+            className="has-text-centered has-text-weight-semibold"
+            onClick={() => {
+              setIsBurger(!isBurger)
+            }}
+          >
+            회원가입
+          </p>
+        </Link>
+        <Link href="create">
+          <p
+            className="has-text-centered has-text-weight-semibold"
+            onClick={() => {
+              setIsBurger(!isBurger)
+            }}
+          >
+            만들기
+          </p>
+        </Link>
       </div>
     </>
   )

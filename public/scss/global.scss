@@ -1,9 +1,7 @@
 .row {
   display: flex;
   flex-direction: row;
-  .rowItem{
-    margin: 10;
-  }
+  justify-content: center;
 }
 
 .level.is-mobile .level-item:not(:last-child) {
