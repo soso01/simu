@@ -2,7 +2,6 @@
   display: flex;
   flex-direction: row;
   justify-content: center;
-  align-items: center;
 }
 
 .level.is-mobile .level-item:not(:last-child) {
@@ -15,4 +14,26 @@
   &:hover {
     color: grey;
   }
+}
+.hero-body {
+  padding: 0;
+}
+.game-img-box {
+  height: 50vh;
+  margin: auto;
+  display: flex;
+  justify-content: center;
+  .game-img {
+    object-fit: contain;
+    height: 100%;
+  }
+}
+.game-text-box {
+  height: 40vh;
+  border-width: 1px;
+  border-style: solid;
+  border-radius: 20px;
+  padding: 20px;
+  background-color: gray;
+  margin-top: 10px;
 }

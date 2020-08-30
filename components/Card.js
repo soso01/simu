@@ -6,7 +6,7 @@ const Card = () => {
     <div className="" style={{ width: 350, margin: 20 }}>
       <div className="column card">
         <div className="card-image">
-          <figure className="image is-4by3">
+          <figure className="image game-img is-4by3">
             <img
               src="https://image.yes24.com/momo/TopCate2750/MidCate008/274974188.jpg"
               alt="Placeholder image"

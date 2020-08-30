@@ -4,7 +4,7 @@ import Link from "next/link"
 const login = () => {
   return (
     <div>
-      <section className="hero is-primary is-fullheight">
+      <section className="hero is-primary is-fullheight-with-navbar">
         <div className="hero-body">
           <div className="container">
             <div className="columns is-centered">
