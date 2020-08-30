@@ -11,7 +11,7 @@ const SearchBar = () => {
     setSearchName,
   } = useContext(AppContext)
   return (
-    <div className="columns is-mobile is-multiline is-centered">
+    <div className="columns is-mobile is-multiline is-centered" style={{marginTop: 10}}>
       <div className="column is-narrow">
         <div className="buttons has-addons">
           {[

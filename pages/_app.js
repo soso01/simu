@@ -1,5 +1,6 @@
 import "bulma"
 import "../public/scss/global.scss"
+import "@fortawesome/fontawesome-free/css/all.min.css"
 import React, { useState, createContext } from "react"
 import Nav from '../components/Nav'
 

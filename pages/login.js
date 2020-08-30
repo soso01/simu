@@ -11,23 +11,23 @@ const login = () => {
               <div class="column is-5-tablet is-4-desktop is-3-widescreen">
                 <form action="" class="box">
                   <div class="field">
-                    <label for="" class="label">
+                    <label class="label">
                       아이디
                     </label>
                     <div class="control has-icons-left">
                       <input
-                        type="email"
-                        placeholder="input ID"
+                        type="text"
+                        placeholder="ID"
                         class="input"
                         required
                       />
                       <span class="icon is-small is-left">
-                        <i class="fa fa-envelope"></i>
+                        <i class="fa fa-user"></i>
                       </span>
                     </div>
                   </div>
                   <div class="field">
-                    <label for="" class="label">
+                    <label class="label">
                       패스워드
                     </label>
                     <div class="control has-icons-left">
