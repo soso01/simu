@@ -8,12 +8,10 @@ const login = () => {
         <div className="hero-body">
           <div className="container">
             <div className="columns is-centered">
-              <div className="column is-5-tablet is-4-desktop is-3-widescreen">
+              <div className="column is-6-tablet is-6-desktop is-5-widescreen">
                 <form action="" className="box">
                   <div className="field">
-                    <label className="label">
-                      아이디
-                    </label>
+                    <label className="label">아이디</label>
                     <div className="control has-icons-left">
                       <input
                         type="text"
@@ -26,10 +24,9 @@ const login = () => {
                       </span>
                     </div>
                   </div>
+
                   <div className="field">
-                    <label className="label">
-                      패스워드
-                    </label>
+                    <label className="label">패스워드</label>
                     <div className="control has-icons-left">
                       <input
                         type="password"
@@ -42,10 +39,24 @@ const login = () => {
                       </span>
                     </div>
                   </div>
+
                   <div className="field">
-                    <label className="label">
-                      이메일 (네이버만)
-                    </label>
+                    <label className="label">닉네임</label>
+                    <div className="control has-icons-left">
+                      <input
+                        type="text"
+                        placeholder="input ID"
+                        className="input"
+                        required
+                      />
+                      <span className="icon is-small is-left">
+                        <i className="fa fa-user"></i>
+                      </span>
+                    </div>
+                  </div>
+
+                  <div className="field">
+                    <label className="label">이메일 (네이버만)</label>
                     <div className="control has-icons-left">
                       <div className="row">
                         <input
@@ -54,7 +65,7 @@ const login = () => {
                           className="input mr-2"
                           required
                         />
-                        <span> @naver.com</span>
+                        <span className="text-centerd"> @naver.com</span>
                       </div>
 
                       <span className="icon is-small is-left">

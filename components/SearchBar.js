@@ -15,8 +15,8 @@ const SearchBar = () => {
       <div className="column is-narrow">
         <div className="buttons has-addons">
           {[
-            { name: "recent", text: "최신순" },
             { name: "popular", text: "인기순" },
+            { name: "recent", text: "최신순" },
           ].map((v, i) => (
             <button
               className={"button" + (sortBy === v.name ? " is-info" : "")}

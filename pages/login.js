@@ -4,58 +4,58 @@ import Link from 'next/link'
 const login = () => {
   return (
     <div>
-      <section class="hero is-primary is-fullheight-with-navbar">
-        <div class="hero-body">
-          <div class="container">
-            <div class="columns is-centered">
-              <div class="column is-5-tablet is-4-desktop is-3-widescreen">
-                <form action="" class="box">
-                  <div class="field">
-                    <label class="label">
+      <section className="hero is-primary is-fullheight-with-navbar">
+        <div className="hero-body">
+          <div className="container">
+            <div className="columns is-centered">
+              <div className="column is-5-tablet is-4-desktop is-3-widescreen">
+                <form action="" className="box">
+                  <div className="field">
+                    <label className="label">
                       아이디
                     </label>
-                    <div class="control has-icons-left">
+                    <div className="control has-icons-left">
                       <input
                         type="text"
                         placeholder="ID"
-                        class="input"
+                        className="input"
                         required
                       />
-                      <span class="icon is-small is-left">
-                        <i class="fa fa-user"></i>
+                      <span className="icon is-small is-left">
+                        <i className="fa fa-user"></i>
                       </span>
                     </div>
                   </div>
-                  <div class="field">
-                    <label class="label">
+                  <div className="field">
+                    <label className="label">
                       패스워드
                     </label>
-                    <div class="control has-icons-left">
+                    <div className="control has-icons-left">
                       <input
                         type="password"
                         placeholder="*******"
-                        class="input"
+                        className="input"
                         required
                       />
-                      <span class="icon is-small is-left">
-                        <i class="fa fa-lock"></i>
+                      <span className="icon is-small is-left">
+                        <i className="fa fa-lock"></i>
                       </span>
                     </div>
                   </div>
-                  <div class="field">
-                    <label for="" class="checkbox">
+                  <div className="field">
+                    <label className="checkbox">
                       <input type="checkbox" />
                       Remember me
                     </label>
                   </div>
                   <div className="row">
-                    <div class="field mr-2">
+                    <div className="field mr-2">
                       <Link href="join">
-                        <button class="button is-primary">가입</button>
+                        <button className="button is-primary">가입</button>
                       </Link>
                     </div>
-                    <div class="field ml-2">
-                      <button class="button is-success">로그인</button>
+                    <div className="field ml-2">
+                      <button className="button is-success">로그인</button>
                     </div>
                   </div>
                 </form>
