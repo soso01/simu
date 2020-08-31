@@ -9,6 +9,10 @@ const handle = app.getRequestHandler()
 
 app.prepare().then(() => {
   const server = express()
+
+  server.use(express.json())
+  server.use("/join", require('./router/join'))
+  
   server.get("*", (req, res) => {
     return handle(req, res)
   })
