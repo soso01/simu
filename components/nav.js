@@ -1,8 +1,29 @@
-import React, { useState } from "react"
+import React, { useState, useEffect } from "react"
 import Link from "next/link"
+import axios from "axios"
+
+import { useCookies } from "react-cookie"
 
 const nav = () => {
   const [isBurger, setIsBurger] = useState(false)
+  const [isLogin, setIsLogin] = useState(false)
+  const [cookies, setCookies, removeCookies] = useCookies(["token"])
+  console.log("쿠키 : ", cookies.token)
+
+  useEffect(() => {
+    const jwtCheck = async () => {
+      const res = await axios.post("/login/jwtVerify", { token: cookies.token })
+      console.log("res.data : ", res.data)
+      if (res.data === "success") setIsLogin(true)
+      else {
+        setIsLogin(false)
+        removeCookies("token")
+      }
+    }
+    if (cookies.token) jwtCheck()
+    else setIsLogin(false)
+  }, [cookies.token])
+
   return (
     <>
       <nav className="navbar" role="navigation" aria-label="main navigation">
@@ -40,16 +61,27 @@ const nav = () => {
 
           <div className="navbar-end">
             <div className="navbar-item">
-              <div className="buttons">
-                <Link href="join">
-                  <a className="button is-primary">
-                    <strong>회원가입</strong>
+              {isLogin ? (
+                <div className="buttons">
+                  <a
+                    className="button is-primary"
+                    onClick={() => removeCookies("token")}
+                  >
+                    <strong>로그아웃</strong>
                   </a>
-                </Link>
-                <Link href="login">
-                  <a className="button is-light">로그인</a>
-                </Link>
-              </div>
+                </div>
+              ) : (
+                <div className="buttons">
+                  <Link href="join">
+                    <a className="button is-primary">
+                      <strong>회원가입</strong>
+                    </a>
+                  </Link>
+                  <Link href="login">
+                    <a className="button is-light">로그인</a>
+                  </Link>
+                </div>
+              )}
             </div>
           </div>
         </div>

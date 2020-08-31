@@ -21,7 +21,6 @@ const transporter = nodemailer.createTransport({
 router.post('/getCertificationNumber', async (req, res) => {
   const { email } = req.body
   const result = await User.findOne({email})
-  console.log(result)
   if(result !== null) return res.send("exist")
 
   const random = Math.floor(100000 + Math.random() * 900000)
@@ -39,7 +38,6 @@ router.post('/getCertificationNumber', async (req, res) => {
 
 router.post('/checkCertificationNumber', async (req, res) => {
   const {email, checkNum} = req.body
-  console.log(Number(certificationObj[email]), certificationObj[email], Number(checkNum))
   if(certificationObj[email] && ( Number(certificationObj[email]) === Number(checkNum) )){
     res.send('success')
   }
@@ -67,8 +65,7 @@ router.post("/checkExistNickName", async (req, res) => {
 // 유저 생성
 router.post("/createUser", async (req, res) => {
   const {id, password, nickName, email} = req.body
-  const result = await User.create({id, password: bcrypt.hashSync(password, 10), nickName, email})
-  console.log(result)
+  const result = await User.create({id, password: bcrypt.hashSync(password, 7), nickName, email})
   res.send('success')
 })
 

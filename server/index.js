@@ -12,12 +12,13 @@ app.prepare().then(() => {
 
   server.use(express.json())
   server.use("/join", require('./router/join'))
+  server.use("/login", require("./router/login"))
   
   server.get("*", (req, res) => {
     return handle(req, res)
   })
   server.listen(3000, (err) => {
-    if (err) console.log(err)
+    if (err) console.log("listen err : ", err)
     console.log("port 3000 on")
   })
 })

@@ -1,7 +1,21 @@
-import React from "react"
+import React, {useState} from "react"
 import Link from 'next/link'
+import axios from "axios"
+import { useCookies } from 'react-cookie';
 
 const login = () => {
+  const [id, setId] = useState("")
+  const [password, setPassword] = useState("")
+  const [longExp, setLongExp] = useState(false)
+  const [cookies, setCookie] = useCookies(['token']);
+
+  const submit = async () => {
+    if(!id || !password) return alert("아이디와 패스워드를 입력하지 않았습니다.")
+    const res = await axios.post('/login', {id, password, longExp})
+    setCookie('token', res.data)
+    window.location.href = '/';
+  }
+
   return (
     <div>
       <section className="hero is-primary is-fullheight-with-navbar">
@@ -19,6 +33,8 @@ const login = () => {
                         type="text"
                         placeholder="ID"
                         className="input"
+                        value={id}
+                        onChange={e => setId(e.target.value)}
                         required
                       />
                       <span className="icon is-small is-left">
@@ -35,6 +51,8 @@ const login = () => {
                         type="password"
                         placeholder="*******"
                         className="input"
+                        value={password}
+                        onChange={e => setPassword(e.target.value)}
                         required
                       />
                       <span className="icon is-small is-left">
@@ -44,8 +62,8 @@ const login = () => {
                   </div>
                   <div className="field">
                     <label className="checkbox">
-                      <input type="checkbox" />
-                      Remember me
+                      <input type="checkbox" onChange={(e) => setLongExp(e.target.checked)} />
+                      <span className="ml-2">30일간 로그인 유지</span>
                     </label>
                   </div>
                   <div className="row">
@@ -55,7 +73,7 @@ const login = () => {
                       </Link>
                     </div>
                     <div className="field ml-2">
-                      <button className="button is-success">로그인</button>
+                      <button type="button" className="button is-success" onClick={submit}>로그인</button>
                     </div>
                   </div>
                 </form>
