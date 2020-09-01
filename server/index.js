@@ -11,8 +11,10 @@ app.prepare().then(() => {
   const server = express()
 
   server.use(express.json())
+  server.use(express.static('public'));
   server.use("/join", require('./router/join'))
   server.use("/login", require("./router/login"))
+  server.use('/image', require('./router/image'))
   
   server.get("*", (req, res) => {
     return handle(req, res)

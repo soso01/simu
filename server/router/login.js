@@ -9,7 +9,6 @@ const jwtCheck = require('../lib/jwtCheck')
 const {jwtSecret} = require('../lib/key')
 
 router.post('/jwtVerify', jwtCheck, (req, res) => {
-  console.log("jwtVerify excute")
   res.send("success")
 })
 
