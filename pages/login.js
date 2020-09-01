@@ -69,11 +69,11 @@ const login = () => {
                   <div className="row">
                     <div className="field mr-2">
                       <Link href="join">
-                        <button className="button is-primary">가입</button>
+                        <button type="button" className="button is-primary">가입</button>
                       </Link>
                     </div>
                     <div className="field ml-2">
-                      <button type="button" className="button is-success" onClick={submit}>로그인</button>
+                      <button className="button is-success" onClick={submit}>로그인</button>
                     </div>
                   </div>
                 </form>

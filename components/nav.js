@@ -8,12 +8,10 @@ const nav = () => {
   const [isBurger, setIsBurger] = useState(false)
   const [isLogin, setIsLogin] = useState(false)
   const [cookies, setCookies, removeCookies] = useCookies(["token"])
-  console.log("쿠키 : ", cookies.token)
 
   useEffect(() => {
     const jwtCheck = async () => {
       const res = await axios.post("/login/jwtVerify", { token: cookies.token })
-      console.log("res.data : ", res.data)
       if (res.data === "success") setIsLogin(true)
       else {
         setIsLogin(false)
@@ -55,8 +53,14 @@ const nav = () => {
         <div id="navbarBasicExample" className="navbar-menu">
           <div className="navbar-start">
             <Link href="create">
-              <a className="navbar-item">만들기</a>
+              <a className="navbar-item">시뮬레이션 만들기</a>
             </Link>
+            {
+              isLogin && (
+                <Link href="create">
+                  <a className="navbar-item">내 시뮬레이션</a>
+                </Link>)
+            }
           </div>
 
           <div className="navbar-end">

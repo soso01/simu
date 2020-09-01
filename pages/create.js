@@ -1,4 +1,8 @@
-import React, { useState } from "react"
+import React, { useState, useEffect } from "react"
+import axios from "axios"
+import { useCookies } from "react-cookie"
+import Login from './login'
+import Spinenr from '../components/Spinner'
 
 const create = () => {
   const [simData, setSimData] = useState({
@@ -17,8 +21,31 @@ const create = () => {
       },
     ],
   })
-  console.log(simData)
-  return (
+  const [isLogin, setIsLogin] = useState(false)
+  const [isLoading, setIsLoading] = useState(false)
+  const [cookies, setCookies, removeCookies] = useCookies(["token"])
+
+  useEffect(() => {
+    const jwtCheck = async () => {
+      const res = await axios.post("/login/jwtVerify", { token: cookies.token })
+      if (res.data === "success") setIsLogin(true)
+      else {
+        setIsLogin(false)
+        removeCookies("token")
+      }
+    }
+    if (cookies.token) jwtCheck()
+    else setIsLogin(false)
+    setIsLoading(true)
+  }, [cookies.token])
+
+  if(1){
+    return <Spinenr></Spinenr>
+  }
+  if(!isLogin){
+    return <Login></Login>
+  }
+  else return (
     <div className="columns is-mobile is-centered mt-5">
       <div className="column is-11-mobile is-8-tablet is-6-desktop">
         <div className="box">
