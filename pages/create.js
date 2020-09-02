@@ -14,16 +14,19 @@ const create = () => {
         script: [
           {
             text: "",
-            action: { type: "", num: 0 },
+            action: { actType: "", num: 0 },
             select: [],
           },
         ],
       },
     ],
   })
+  const [images, setImages] = useState([])
   const [isLogin, setIsLogin] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const [cookies, setCookies, removeCookies] = useCookies(["token"])
+
+  console.log(simData)
 
   useEffect(() => {
     const jwtCheck = async () => {
@@ -41,8 +44,6 @@ const create = () => {
 
   const uploadFile = async (e, page) => {
     const file = e.target.files[0]
-    console.log(file)
-    console.log(file.type)
     if (
       file.type !== "image/jpeg" &&
       file.type !== "image/gif" &&
@@ -58,10 +59,15 @@ const create = () => {
       const res = await axios.post("/image/upload", formData)
       if (res.data === "fail") alert("이미지 업로드에 실패했습니다.")
       else {
+        if(page.img) setImages([...images, page.img])
         page.img = res.data
         setSimData({ ...simData })
       }
     }
+  }
+  
+  const submit = async () => {
+    await axios.post('/game/create', {data: simData, token: cookies.token, images})
   }
 
   if (!isLoading) {
@@ -143,7 +149,7 @@ const create = () => {
                       </span>
                       <span className="file-label">사진 업로드</span>
                     </span>
-                    {page.img && <span class="file-name">{page.img}</span>}
+                    {page.img && <span className="file-name">{page.img}</span>}
                   </label>
                 </div>
 
@@ -196,11 +202,12 @@ const create = () => {
                           <div className="control mr-2">
                             <div className="select">
                               <select
-                                value={scriptValue.action.type}
+                                value={scriptValue.action.actType}
                                 onChange={(e) => {
-                                  scriptValue.action.type = e.target.value
+                                  scriptValue.action.actType = e.target.value
                                   setSimData({ ...simData })
                                 }}
+                                required
                               >
                                 <option value="">선택하세요</option>
                                 <option value="movePage">페이지 이동</option>
@@ -210,8 +217,8 @@ const create = () => {
                                 <option value="exit">시뮬레이션 종료</option>
                               </select>
                             </div>
-                            {scriptValue.action.type &&
-                              scriptValue.action.type !== "exit" && (
+                            {scriptValue.action.actType &&
+                              scriptValue.action.actType !== "exit" && (
                                 <div className="select">
                                   <select
                                     value={scriptValue.action.num}
@@ -219,9 +226,10 @@ const create = () => {
                                       scriptValue.action.num = e.target.value
                                       setSimData({ ...simData })
                                     }}
+                                    required
                                   >
                                     <option value="">선택하세요</option>
-                                    {scriptValue.action.type === "movePage"
+                                    {scriptValue.action.actType === "movePage"
                                       ? simData.pages.map(
                                           (optionValue, optionIndex) => (
                                             <option
@@ -284,9 +292,10 @@ const create = () => {
                               <div className="select">
                                 <select
                                   onChange={(e) => {
-                                    selectValue.action.type = e.target.value
+                                    selectValue.action.actType = e.target.value
                                     setSimData({ ...simData })
                                   }}
+                                  required
                                 >
                                   <option value="">선택하세요</option>
                                   <option value="movePage">페이지 이동</option>
@@ -295,16 +304,17 @@ const create = () => {
                                   </option>
                                 </select>
                               </div>
-                              {selectValue.action.type && (
+                              {selectValue.action.actType && (
                                 <div className="select">
                                   <select
                                     onChange={(e) => {
                                       selectValue.action.num = e.target.value
                                       setSimData({ ...simData })
                                     }}
+                                    required
                                   >
                                     <option value="">선택하세요</option>
-                                    {selectValue.action.type === "movePage"
+                                    {selectValue.action.actType === "movePage"
                                       ? simData.pages.map(
                                           (optionValue, optionIndex) => (
                                             <option value={optionIndex + 1}>
@@ -334,7 +344,7 @@ const create = () => {
                           scriptValue.select.push({
                             text: "",
                             action: {
-                              type: "",
+                              actType: "",
                               num: 0,
                             },
                           })
@@ -353,7 +363,7 @@ const create = () => {
                     onClick={() => {
                       page.script.push({
                         text: "",
-                        action: { type: "", num: 0 },
+                        action: { actType: "", num: 0 },
                         select: [],
                       })
                       setSimData({ ...simData })
@@ -373,7 +383,7 @@ const create = () => {
                     script: [
                       {
                         text: "",
-                        action: { type: "", num: 0 },
+                        action: { actType: "", num: 0 },
                         select: [],
                       },
                     ],
@@ -386,7 +396,7 @@ const create = () => {
             </div>
             <div className="field row mt-6 mb-6">
               <div className="control">
-                <button className="button is-link mr-2">생성하기</button>
+                <button className="button is-link mr-2" onClick={submit}>생성하기</button>
               </div>
               <div className="control">
                 <button className="button is-link is-light ml-2">

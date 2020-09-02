@@ -7,14 +7,18 @@ const dev = process.env.NODE_ENV !== "production"
 const app = next({ dev })
 const handle = app.getRequestHandler()
 
+const garbageImage = require("./lib/garbageImage")
+
 app.prepare().then(() => {
   const server = express()
+  garbageImage()
 
   server.use(express.json())
-  server.use(express.static('public'));
+
   server.use("/join", require('./router/join'))
   server.use("/login", require("./router/login"))
   server.use('/image', require('./router/image'))
+  server.use('/game', require('./router/game'))
   
   server.get("*", (req, res) => {
     return handle(req, res)

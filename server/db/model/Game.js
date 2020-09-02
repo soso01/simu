@@ -8,11 +8,11 @@ var gameSchema = new Schema({
   desc: { type: String, required: true },
   pages: [{ img: String, script: [{
     text: String,
-    action: {type: String, num: {type: Number, defaultValue: 0}},
+    action: {actType: {type : String}, num: {type: Number, defaultValue: 0}},
     select: [
       {
         text: String,
-        action: {type: String, num: {type: Number, defaultValue: 0}},
+        action: {actType: {type : String}, num: {type: Number, defaultValue: 0}},
       }
     ]
   }]}],

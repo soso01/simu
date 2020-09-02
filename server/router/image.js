@@ -4,6 +4,7 @@ const path = require('path')
 
 const router = express()
 const upload = require('../lib/upload')
+const { Image } = require('../db/model')
 
 router.post("/upload", (req, res) => {
   upload(req, res, function(err) {
@@ -12,6 +13,7 @@ router.post("/upload", (req, res) => {
     } else if (err) {
       res.send("fail")
     }
+    Image.create({ name: req.file.filename })
     return res.send(req.file.filename);
   });
 })
