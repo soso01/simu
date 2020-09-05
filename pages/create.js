@@ -8,6 +8,7 @@ const create = () => {
   const [simData, setSimData] = useState({
     title: "",
     desc: "",
+    thumbnail: 0,
     pages: [
       {
         img: "",
@@ -59,15 +60,19 @@ const create = () => {
       const res = await axios.post("/image/upload", formData)
       if (res.data === "fail") alert("이미지 업로드에 실패했습니다.")
       else {
-        if(page.img) setImages([...images, page.img])
+        if (page.img) setImages([...images, page.img])
         page.img = res.data
         setSimData({ ...simData })
       }
     }
   }
-  
+
   const submit = async () => {
-    await axios.post('/game/create', {data: simData, token: cookies.token, images})
+    await axios.post("/game/create", {
+      data: simData,
+      token: cookies.token,
+      images,
+    })
   }
 
   if (!isLoading) {
@@ -115,6 +120,22 @@ const create = () => {
 
                 <p className="title is-4 row">
                   페이지 {i + 1}
+                  {i === simData.thumbnail ? (
+                    <button
+                      className="button is-info is-small ml-4"
+                    >
+                      현재 썸네일
+                    </button>
+                  ) : (
+                    <button
+                      className="button is-success is-small ml-4"
+                      onClick={() => {
+                        setSimData({ ...simData, thumbnail: i })
+                      }}
+                    >
+                      썸네일 설정
+                    </button>
+                  )}
                   <button
                     className="button is-danger is-small ml-4"
                     onClick={() => {
@@ -132,7 +153,11 @@ const create = () => {
                   </button>
                 </p>
 
-                {page.img && <div style={{padding: 20, borderWidth: 1, borderRadius: 5}}><img src={"/image/" + page.img}></img></div>}
+                {page.img && (
+                  <div style={{ padding: 20, borderWidth: 1, borderRadius: 5 }}>
+                    <img src={"/image/" + page.img}></img>
+                  </div>
+                )}
 
                 <div className="file has-name is-boxed is-centered mb-5">
                   <label className="file-label">
@@ -396,7 +421,9 @@ const create = () => {
             </div>
             <div className="field row mt-6 mb-6">
               <div className="control">
-                <button className="button is-link mr-2" onClick={submit}>생성하기</button>
+                <button className="button is-link mr-2" onClick={submit}>
+                  생성하기
+                </button>
               </div>
               <div className="control">
                 <button className="button is-link is-light ml-2">

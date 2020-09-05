@@ -6,18 +6,22 @@ const Card = () => {
     <div className="" style={{ width: 350, margin: 20 }}>
       <div className="column card">
         <div className="card-image">
-          <figure className="image game-img is-4by3">
+          <figure className="image" style={{display: "flex", justifyContent: "center"}}>
             <img
               src="https://image.yes24.com/momo/TopCate2750/MidCate008/274974188.jpg"
               alt="Placeholder image"
+              style={{
+                width: "300px",
+                height: "300px"
+              }}
             />
           </figure>
         </div>
         <div className="card-content">
           <div className="content">
-            <p className="title is-4">
+            <span className="title is-4">
               엘사와 학교가기
-            </p>
+            </span>
           </div>
 
           <div className="content">

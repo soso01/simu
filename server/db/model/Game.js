@@ -6,6 +6,7 @@ var gameSchema = new Schema({
   nickName: { type: String, required: true },
   title: { type: String, required: true },
   desc: { type: String, required: true },
+  thumbnail: {type : Number, default: 0},
   pages: [{ img: String, script: [{
     text: String,
     action: {actType: {type : String}, num: {type: Number, defaultValue: 0}},
