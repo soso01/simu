@@ -27,7 +27,6 @@ const create = () => {
   const [isLoading, setIsLoading] = useState(false)
   const [cookies, setCookies, removeCookies] = useCookies(["token"])
 
-  console.log(simData)
 
   useEffect(() => {
     const jwtCheck = async () => {
@@ -45,15 +44,16 @@ const create = () => {
 
   const uploadFile = async (e, page) => {
     const file = e.target.files[0]
-    if (
+    if(!file) return null
+    else if (
       file.type !== "image/jpeg" &&
       file.type !== "image/gif" &&
       file.type !== "image/png"
     ) {
       alert("이미지 파일만 업로드 할 수 있습니다. (jpeg, png, gif)")
     }
-    if (file.size > 10 * 1024 * 1024) {
-      alert("10MB 이하의 이미지만 업로드 할 수 있습니다.")
+    if (file.size > 20 * 1024 * 1024) {
+      alert("20MB 이하의 이미지만 업로드 할 수 있습니다.")
     } else {
       const formData = new FormData()
       formData.append("file", file)

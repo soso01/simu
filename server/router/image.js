@@ -1,25 +1,32 @@
-const express = require('express')
-const multer = require('multer')
-const path = require('path')
+const express = require("express")
+const multer = require("multer")
+const path = require("path")
+const webp = require("webp-converter")
+const fs = require("fs")
 
 const router = express()
-const upload = require('../lib/upload')
-const { Image } = require('../db/model')
+const upload = require("../lib/upload")
+const { Image } = require("../db/model")
 
-router.post("/upload", (req, res) => {
-  upload(req, res, function(err) {
-    if (err instanceof multer.MulterError) {
-      res.send("fail")
-    } else if (err) {
-      res.send("fail")
-    }
-    Image.create({ name: req.file.filename })
-    return res.send(req.file.filename);
-  });
+router.post("/upload", upload, async (req, res) => {
+  const webpName =
+    path.basename(req.file.filename, path.extname(req.file.filename)) + ".webp"
+  if (req.file.mimetype === "image/gif") {
+    await webp.gwebp(req.file.path, req.file.destination + webpName, "-lossy")
+  } else {
+    await webp.cwebp(req.file.path, req.file.destination + webpName)
+  }
+  fs.unlinkSync(req.file.path)
+  Image.create({ name: webpName, path: req.imagePathDate })
+  return res.send(webpName)
 })
 
-router.get("/:filename", (req, res) => {
-  res.sendFile(path.normalize(__dirname + "/../image/" + req.params.filename))
+router.get("/:filename", async (req, res) => {
+  const result = await Image.findOne({ name: req.params.filename })
+  console.log(result)
+  res.sendFile(
+    path.normalize(__dirname + "/../image/" + result.path + req.params.filename)
+  )
 })
 
 module.exports = router
