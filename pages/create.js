@@ -22,11 +22,11 @@ const create = () => {
       },
     ],
   })
-  const [images, setImages] = useState([])
   const [isLogin, setIsLogin] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const [cookies, setCookies, removeCookies] = useCookies(["token"])
 
+  console.log(simData)
 
   useEffect(() => {
     const jwtCheck = async () => {
@@ -60,7 +60,6 @@ const create = () => {
       const res = await axios.post("/image/upload", formData)
       if (res.data === "fail") alert("이미지 업로드에 실패했습니다.")
       else {
-        if (page.img) setImages([...images, page.img])
         page.img = res.data
         setSimData({ ...simData })
       }
@@ -70,8 +69,7 @@ const create = () => {
   const submit = async () => {
     await axios.post("/game/create", {
       data: simData,
-      token: cookies.token,
-      images,
+      token: cookies.token
     })
   }
 

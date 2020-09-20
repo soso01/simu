@@ -2,23 +2,70 @@ const express = require("express")
 const fs = require("fs")
 const path = require("path")
 const router = express()
+const sharp = require("sharp")
 
 const { Game, Image } = require("../db/model")
 const jwtCheck = require("../lib/jwtCheck")
 
+const createThumbnail = async (originalName, gameId) => {
+  const thumbName =
+    "thumb_" + path.basename(originalName, path.extname(originalName)) + ".webp"
+  const thumbExist = await Image.findOne({ name: thumbName })
+  if (!thumbExist) {
+    const originalImage = await Image.findOne({ name: originalName })
+    sharp(
+      path.normalize(
+        __dirname + "/../image/" + originalImage.path + originalName
+      )
+    )
+      .resize(300, 300)
+      .toFile(
+        path.normalize(
+          __dirname + "/../image/" + originalImage.path + thumbName
+        )
+      )
+    await Image.create({ name: thumbName, path: originalImage.path, gameId })
+  }
+  return thumbName
+}
+
 router.post("/create", jwtCheck, async (req, res) => {
   console.log(req.body)
   console.log(req.user)
-  const { data, images } = req.body
+  const { data } = req.body
+
+  const game = await Game.create({
+    ...data,
+    userId: req.user.id,
+    nickName: req.user.nickName,
+  })
+  //썸네일 생성
+  game.thumbnail = await createThumbnail(
+    data.pages[data.thumbnail].img,
+    game._id
+  )
+  game.save()
+
+  const images = await Image.find({ gameId: game._id })
+  for (let i = 0; i < images.length; i++) {
+    images[i].gameId = null
+    images[i].updated = Date.now()
+    await images[i].save()
+  }
+
   data.pages.forEach(async (v) => {
-    Image.deleteOne({ name: v.img })
+    await Image.findOneAndUpdate(
+      { name: v.img },
+      { gameId: game._id }
+    )
   })
-  images.forEach((v) => {
-    //이거 나중에 수정기능 완성하고 나서 해봐야함!!
-    Image.findOneAndUpdate({ name: v }, null, { upsert: true })
-  })
-  const game = await Game.create({...data, userId : req.user.id, nickName : req.user.nickName})
-  console.log(game)
+  await Image.findOneAndUpdate({ name: game.thumbnail }, { gameId: game._id })
+
+  res.json(game)
+})
+
+router.get('/getList', async (req, res) => {
+  console.log(req.body)
 })
 
 module.exports = router

@@ -1,10 +1,11 @@
 import React, { useContext } from "react"
+import axios from 'axios'
+
 import Head from "next/head"
 import Card from '../components/Card'
 import SearchBar from '../components/SearchBar'
 
-const Home = () => {
-
+const Home = ({games}) => {
   return (
     <div>
       <Head>
@@ -19,6 +20,24 @@ const Home = () => {
       </main>
     </div>
   )
+}
+
+export async function getStaticProps() {
+  const {
+    sortBy,
+    dateSort,
+    searchName,
+  } = useContext(AppContext)
+
+  const games = (await axios.post("/game/getList", {sortBy, dateSort, searchName})).data
+
+  // By returning { props: posts }, the Blog component
+  // will receive `posts` as a prop at build time
+  return {
+    props: {
+      games,
+    },
+  }
 }
 
 export default Home
