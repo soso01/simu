@@ -7,6 +7,8 @@ var gameSchema = new Schema({
   title: { type: String, required: true },
   desc: { type: String, required: true },
   thumbnail: {type : String, default: 0},
+  count: {type : Number, default: 0},
+  created: {type: Date, default: Date.now},
   pages: [{ img: String, script: [{
     text: String,
     action: {actType: {type : String}, num: {type: Number, defaultValue: 0}},

@@ -12,8 +12,13 @@ const login = () => {
   const submit = async () => {
     if(!id || !password) return alert("아이디와 패스워드를 입력하지 않았습니다.")
     const res = await axios.post('/login', {id, password, longExp})
-    setCookie('token', res.data)
-    window.location.href = '/';
+    if(res.data === "fail"){
+      alert("아이디 혹은 비밀번호가 올바르지 않습니다.")
+    }
+    else {
+      setCookie('token', res.data)
+      window.location.href = '/';
+    }
   }
 
   return (

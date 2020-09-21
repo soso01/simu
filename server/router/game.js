@@ -18,7 +18,7 @@ const createThumbnail = async (originalName, gameId) => {
         __dirname + "/../image/" + originalImage.path + originalName
       )
     )
-      .resize(300, 300)
+      .resize(600, 600)
       .toFile(
         path.normalize(
           __dirname + "/../image/" + originalImage.path + thumbName
@@ -30,8 +30,6 @@ const createThumbnail = async (originalName, gameId) => {
 }
 
 router.post("/create", jwtCheck, async (req, res) => {
-  console.log(req.body)
-  console.log(req.user)
   const { data } = req.body
 
   const game = await Game.create({
@@ -64,8 +62,22 @@ router.post("/create", jwtCheck, async (req, res) => {
   res.json(game)
 })
 
-router.get('/getList', async (req, res) => {
-  console.log(req.body)
+router.post('/getList', async (req, res) => {
+  const { sortBy, dateSort, searchName } = req.body;
+
+  const filter = {}
+  if(searchName) {
+    filter["$or"] = [{title: new RegExp(searchName, "gi")}, {desc: new RegExp(searchName, "gi")}]
+  }
+  if(dateSort === "month") filter["created"] = { "$gte" : Date.now() - 1000 * 60 * 60 * 24 * 30 }
+  else if (dateSort === "week") filter["created"] = { "$gte" : Date.now() - 1000 * 60 * 60 * 24 * 7 }
+  else if (dateSort === "day") filter["created"] = { "$gte" : Date.now() - 1000 * 60 * 60 * 24 }
+
+  const games = await Game.find(filter).sort(sortBy === "popular" ? {count: -1} : {created: -1}).select("title desc nickName thumbnail created")
+
+  console.log(games)
+
+  res.json(games)
 })
 
 module.exports = router

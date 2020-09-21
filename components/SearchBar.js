@@ -1,5 +1,5 @@
-import React, { useContext } from "react"
-import { AppContext } from '../pages/_app'
+import React, { useContext, useState } from "react"
+import { AppContext } from "../pages/_app"
 
 const SearchBar = () => {
   const {
@@ -10,8 +10,12 @@ const SearchBar = () => {
     searchName,
     setSearchName,
   } = useContext(AppContext)
+  const [tmpName, setTmpName] = useState("")
   return (
-    <div className="columns is-mobile is-multiline is-centered" style={{marginTop: 10}}>
+    <div
+      className="columns is-mobile is-multiline is-centered"
+      style={{ marginTop: 10 }}
+    >
       <div className="column is-narrow">
         <div className="buttons has-addons">
           {[
@@ -52,10 +56,18 @@ const SearchBar = () => {
             className="input"
             type="text"
             placeholder="검색어 입력"
-            value={searchName}
-            onChange={(e) => setSearchName(e.target.value)}
+            value={tmpName}
+            onChange={(e) => setTmpName(e.target.value)}
+            onKeyPress={(e) => {
+              if (e.key === "Enter") setSearchName(tmpName)
+            }}
           />
-          <button className="button is-primary">검색</button>
+          <button
+            className="button is-primary"
+            onClick={() => setSearchName(tmpName)}
+          >
+            검색
+          </button>
         </div>
       </div>
     </div>

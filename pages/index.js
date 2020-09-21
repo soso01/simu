@@ -1,11 +1,28 @@
-import React, { useContext } from "react"
-import axios from 'axios'
+import React, { useState, useContext, useEffect } from "react"
+import axios from "axios"
 
 import Head from "next/head"
-import Card from '../components/Card'
-import SearchBar from '../components/SearchBar'
+import Card from "../components/Card"
+import SearchBar from "../components/SearchBar"
+import { AppContext } from "./_app"
 
-const Home = ({games}) => {
+const Home = () => {
+  const { sortBy, dateSort, searchName } = useContext(AppContext)
+  const [games, setGames] = useState([])
+
+  useEffect(() => {
+    const fetch = async () => {
+      const res = await axios.post("/game/getList", {
+        sortBy,
+        dateSort,
+        searchName,
+      })
+      setGames(res.data)
+    }
+
+    fetch()
+  }, [sortBy, dateSort, searchName])
+
   return (
     <div>
       <Head>
@@ -15,29 +32,13 @@ const Home = ({games}) => {
       <main>
         <SearchBar />
         <div className="columns is-mobile is-multiline is-centered">
-          <Card/><Card/><Card/><Card/><Card/><Card/><Card/><Card/><Card/><Card/><Card/><Card/><Card/><Card/><Card/><Card/>
+          {games.map((v, i) => (
+            <Card key={i} data={v} />
+          ))}
         </div>
       </main>
     </div>
   )
-}
-
-export async function getStaticProps() {
-  const {
-    sortBy,
-    dateSort,
-    searchName,
-  } = useContext(AppContext)
-
-  const games = (await axios.post("/game/getList", {sortBy, dateSort, searchName})).data
-
-  // By returning { props: posts }, the Blog component
-  // will receive `posts` as a prop at build time
-  return {
-    props: {
-      games,
-    },
-  }
 }
 
 export default Home

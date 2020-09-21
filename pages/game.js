@@ -1,7 +1,7 @@
 import React from "react"
 import Link from "next/link"
 
-const login = () => {
+const game = () => {
   return (
     <div>
       <section className="hero is-dark is-bold is-fullheight-with-navbar">
@@ -18,4 +18,4 @@ const login = () => {
   )
 }
 
-export default login
+export default game
