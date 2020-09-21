@@ -7,6 +7,7 @@ const garbageImage = require('./lib/garbageImage')
 const dev = process.env.NODE_ENV !== "production"
 const app = next({ dev })
 const handle = app.getRequestHandler()
+const { port } = require('../key')
 
 app.prepare().then(() => {
   garbageImage()
@@ -21,8 +22,10 @@ app.prepare().then(() => {
   server.get("*", (req, res) => {
     return handle(req, res)
   })
-  server.listen(3000, (err) => {
+  server.listen(port, (err) => {
     if (err) console.log("listen err : ", err)
-    console.log("port 3000 on")
+    console.log("port " + port + " on")
   })
 })
+
+module.exports = app

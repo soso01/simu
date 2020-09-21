@@ -3,6 +3,7 @@ const fs = require("fs")
 const path = require("path")
 const router = express()
 const sharp = require("sharp")
+const app = require("../index")
 
 const { Game, Image } = require("../db/model")
 const jwtCheck = require("../lib/jwtCheck")
@@ -52,32 +53,47 @@ router.post("/create", jwtCheck, async (req, res) => {
   }
 
   data.pages.forEach(async (v) => {
-    await Image.findOneAndUpdate(
-      { name: v.img },
-      { gameId: game._id }
-    )
+    await Image.findOneAndUpdate({ name: v.img }, { gameId: game._id })
   })
   await Image.findOneAndUpdate({ name: game.thumbnail }, { gameId: game._id })
 
   res.json(game)
 })
 
-router.post('/getList', async (req, res) => {
-  const { sortBy, dateSort, searchName } = req.body;
+router.post("/getList", async (req, res) => {
+  const { sortBy, dateSort, searchName } = req.body
 
   const filter = {}
-  if(searchName) {
-    filter["$or"] = [{title: new RegExp(searchName, "gi")}, {desc: new RegExp(searchName, "gi")}]
+  if (searchName) {
+    filter["$or"] = [
+      { title: new RegExp(searchName, "gi") },
+      { desc: new RegExp(searchName, "gi") },
+    ]
   }
-  if(dateSort === "month") filter["created"] = { "$gte" : Date.now() - 1000 * 60 * 60 * 24 * 30 }
-  else if (dateSort === "week") filter["created"] = { "$gte" : Date.now() - 1000 * 60 * 60 * 24 * 7 }
-  else if (dateSort === "day") filter["created"] = { "$gte" : Date.now() - 1000 * 60 * 60 * 24 }
+  if (dateSort === "month")
+    filter["created"] = { $gte: Date.now() - 1000 * 60 * 60 * 24 * 30 }
+  else if (dateSort === "week")
+    filter["created"] = { $gte: Date.now() - 1000 * 60 * 60 * 24 * 7 }
+  else if (dateSort === "day")
+    filter["created"] = { $gte: Date.now() - 1000 * 60 * 60 * 24 }
 
-  const games = await Game.find(filter).sort(sortBy === "popular" ? {count: -1} : {created: -1}).select("title desc nickName thumbnail created")
-
-  console.log(games)
+  const games = await Game.find(filter)
+    .sort(sortBy === "popular" ? { count: -1 } : { created: -1 })
+    .select("title desc nickName thumbnail created seq")
 
   res.json(games)
+})
+
+router.post("/getGame", async(req, res) => {
+  const {seq} = req.body
+  const game = await Game.findOne({seq})
+  res.json(game)
+})
+
+router.get("/:seq", async (req, res) => {
+  const actualPage = "/game"
+  const queryParams = { seq: req.params.seq }
+  app.render(req, res, actualPage, queryParams)
 })
 
 module.exports = router

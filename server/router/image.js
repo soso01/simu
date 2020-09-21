@@ -23,7 +23,6 @@ router.post("/upload", upload, async (req, res) => {
 
 router.get("/:filename", async (req, res) => {
   const result = await Image.findOne({ name: req.params.filename })
-  console.log(result)
   res.sendFile(
     path.normalize(__dirname + "/../image/" + result.path + req.params.filename)
   )
