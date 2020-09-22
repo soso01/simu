@@ -20,7 +20,7 @@ const game = ({ game }) => {
 
   const runAction = (action) => {
     if(action.actType === "movePage"){
-      setPageNum(action.num - 1)
+      setPageNum(action.num)
     }
     else if(action.actType === "moveScript"){
       setScriptNum(action.num)

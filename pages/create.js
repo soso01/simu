@@ -257,7 +257,7 @@ const create = () => {
                                           (optionValue, optionIndex) => (
                                             <option
                                               key={optionIndex}
-                                              value={optionIndex + 1}
+                                              value={optionIndex}
                                             >
                                               페이지 {optionIndex + 1}
                                             </option>
@@ -340,7 +340,7 @@ const create = () => {
                                     {selectValue.action.actType === "movePage"
                                       ? simData.pages.map(
                                           (optionValue, optionIndex) => (
-                                            <option value={optionIndex + 1}>
+                                            <option value={optionIndex}>
                                               페이지 {optionIndex + 1}
                                             </option>
                                           )
