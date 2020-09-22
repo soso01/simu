@@ -17,15 +17,14 @@ const game = ({ game }) => {
   const [printText, setPrintText] = useState("")
   const [nowScript, setNowScript] = useState(pages[pageNum].script[scriptNum])
 
+  let addLetter
 
   const runAction = (action) => {
-    if(action.actType === "movePage"){
+    if (action.actType === "movePage") {
       setPageNum(action.num)
-    }
-    else if(action.actType === "moveScript"){
+    } else if (action.actType === "moveScript") {
       setScriptNum(action.num)
-    }
-    else if (action.actType === "exit") {
+    } else if (action.actType === "exit") {
       setIsEndModal(true)
     }
   }
@@ -33,25 +32,15 @@ const game = ({ game }) => {
   const gameTextClick = () => {
     console.log("clicked")
     console.log(nowScript)
-    if(scriptText.length > 0){
+    if (scriptText.length > 0) {
+      clearTimeout(addLetter)
       setPrintText(printText + scriptText)
       setScriptText("")
-    }
-    else {
-      if(nowScript.select.length === 0){
+    } else {
+      if (nowScript.select.length === 0) {
         runAction(nowScript.action)
       }
     }
-  }
-
-  const textSetting = () => {
-    setTimeout( () => {
-      if (scriptText.length > 0) {
-         setPrintText(printText + scriptText[0])
-         setScriptText(scriptText.slice(1))
-        textSetting()
-      }
-    }, 500)
   }
 
   useEffect(() => {
@@ -62,12 +51,10 @@ const game = ({ game }) => {
 
   useEffect(() => {
     if (!isStartModal && scriptText.length > 0) {
-      const addLetter = (setPrintText, setScriptText, printText, scriptText) =>
-        setTimeout(() => {
-          setPrintText(printText + scriptText[0])
-          setScriptText(scriptText.slice(1))
-        }, 100)
-      addLetter(setPrintText, setScriptText, printText, scriptText)
+      addLetter = setTimeout(() => {
+        setPrintText(printText + scriptText[0])
+        setScriptText(scriptText.slice(1))
+      }, 100)
     }
   }, [scriptText, isStartModal])
 
@@ -99,23 +86,29 @@ const game = ({ game }) => {
                 src={"/image/" + pages[pageNum].img}
               ></img>
             </div>
-            <div className="game-text-box ml-1 mr-1 is-size-5" onClick={gameTextClick}>
+            <div
+              className="game-text-box ml-1 mr-1 is-size-5"
+              onClick={gameTextClick}
+            >
               {printText.split("\n").map((v, i) => (
                 <span key={i}>
                   {v} <br />
                 </span>
               ))}
-              {scriptText.length === 0 &&
-                nowScript.select.length > 0 && (
-                  <div style={{ marginTop: 20 }}>
-                    {scriptText.length === 0 &&
-                      nowScript.select.map((v, i) => (
-                        <p className="textSelect" key={i} onClick={() => runAction(v.action)}>
-                          {i} ) {v.text}
-                        </p>
-                      ))}
-                  </div>
-                )}
+              {scriptText.length === 0 && nowScript.select.length > 0 && (
+                <div style={{ marginTop: 20 }}>
+                  {scriptText.length === 0 &&
+                    nowScript.select.map((v, i) => (
+                      <p
+                        className="textSelect"
+                        key={i}
+                        onClick={() => runAction(v.action)}
+                      >
+                        {i} ) {v.text}
+                      </p>
+                    ))}
+                </div>
+              )}
             </div>
           </div>
         </div>
