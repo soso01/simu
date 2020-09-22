@@ -1,8 +1,14 @@
-import React from "react"
+import React, { useState } from "react"
 import axios from "axios"
 import { port } from "../key"
+import Modal from '../components/Modal'
 
 const game = ({ game }) => {
+  const [isStartModal, setIsStartModal] = useState(true)
+  const [isExitModal, setIsExitModal] = useState(false)
+
+  return <Modal active={isStartModal} title={game.title} content={game.desc} />
+
   return (
     <div>
       <section className="hero is-dark is-bold is-fullheight-with-navbar">
