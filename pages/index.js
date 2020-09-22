@@ -31,7 +31,7 @@ const Home = () => {
       </Head>
       <main>
         <SearchBar />
-        <div className="columns is-mobile is-multiline is-centered">
+        <div className="columns is-mobile is-multiline is-centered" style={{display: "flex", flexWrap: "wrap"}}>
           {games.map((v, i) => (
             <Card key={i} data={v} />
           ))}

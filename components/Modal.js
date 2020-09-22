@@ -1,26 +1,25 @@
 import React, { useState } from "react"
 
-const Modal = ({ active, title, content }) => {
-  const [isActive, setIsActive] = useState(active === true)
+const Modal = ({ active, onClickFunc, title, content, buttonText }) => {
 
   return (
-    <div className={"modal " + (isActive && "is-active")}>
-      <div className="modal-background" onClick={() => setIsActive(false)}></div>
+    <div className={"modal " + (active && "is-active")}>
+      <div className="modal-background" onClick={onClickFunc}></div>
       <div className="modal-card" style={{ margin: 0, maxHeight: "60vh" }}>
         <header className="modal-card-head">
           <p className="modal-card-title">{title}</p>
           <button
             className="delete"
             aria-label="close"
-            onClick={() => setIsActive(false)}
+            onClick={onClickFunc}
           ></button>
         </header>
-        <section className="modal-card-body" style={{wordBreak:"break-word", whiteSpace: 'pre'}}>
-          {content}
+        <section className="modal-card-body" style={{wordBreak:"break-word"}}>
+          {content.split('\n').map((v, i) => <span key={i}>{v} <br /></span>)}
         </section>
         <footer className="modal-card-foot row">
-          <button className="button" onClick={() => setIsActive(false)}>
-            종료
+          <button className="button" onClick={onClickFunc}>
+            {buttonText}
           </button>
         </footer>
       </div>

@@ -44,5 +44,22 @@
   padding: 20px;
   background-color: gray;
   margin-top: 10px;
+
+  overflow-y: scroll;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+  
+  .textSelect {
+    background-color: #363636;
+    padding: 5px;
+    margin: 3px;
+    border-radius: 10px;
+    &:hover {
+      background-color: #2f4550;
+    }
+  }
 }
 
