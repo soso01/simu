@@ -26,14 +26,15 @@ const comment = ({ game, initBest, initComments, count }) => {
   }, [cookies.token])
 
   const moreComment = async (limitNum) => {
+    const scrollTop = window.pageYOffset
     setPage(page + 1)
     const res = await axios.post("/comment/getMoreComments", {
       seq: game.seq,
       page,
       limitNum,
     })
-    console.log(res.data)
     setComments([...comments, ...res.data])
+    window.scrollTo({ top: scrollTop })
   }
 
   const submitComment = async () => {
@@ -127,45 +128,58 @@ const comment = ({ game, initBest, initComments, count }) => {
                 </nav>
               </div>
             </article>
-
-            {best.map((v, i) => (
-              <article className="media" key={i}>
-                <div className="media-content">
-                  <div className="content">
-                    <div>
-                      <strong style={{ color: "red" }}>Best) </strong>
-                      <strong>{v.userNickname}</strong>
-                      <small> + {v.recommendCount}</small>
-                      <div className="mt-1 mb-1">{v.text}</div>
-                      <small>
-                        <a onClick={() => recommendComment(v)}>추천</a> ·{" "}
-                        <a onClick={() => accuseComment(v)}>신고</a>
-                        {v.userId === userId && (
-                          <>
-                            {" · "}
-                            <a onClick={() => deleteComment(v)}>삭제</a>
-                          </>
-                        )}
-                        {"   @ "}
-                        {moment(v.created).fromNow()}
-                      </small>
+            <div
+              style={{
+                backgroundColor: "aliceblue",
+                paddingTop: 20,
+                paddingBottom: 20,
+                paddingLeft: 5,
+                paddingRight: 5,
+                marginTop: 10,
+                marginBottom: 10,
+                borderRadius: 10
+              }}
+            >
+              {best.map((v, i) => (
+                <article className="media" key={i}>
+                  <div className="media-content">
+                    <div className="content">
+                      <div>
+                        <strong style={{ color: "blue" }}>Best) </strong>
+                        <strong>{v.userNickname}</strong>
+                        <small> + {v.recommendCount}</small>
+                        <div className="mt-1 mb-1">{v.text}</div>
+                        <small>
+                          <a onClick={() => recommendComment(v)}>추천</a> ·{" "}
+                          <a onClick={() => accuseComment(v)}>신고</a>
+                          {v.userId === userId && (
+                            <>
+                              {" · "}
+                              <a onClick={() => deleteComment(v)}>삭제</a>
+                            </>
+                          )}
+                          {"   @ "}
+                          {moment(v.created).fromNow()}
+                        </small>
+                      </div>
                     </div>
                   </div>
-                </div>
-              </article>
-            ))}
-
+                </article>
+              ))}
+            </div>
             {comments.map((v, i) => (
               <article className="media" key={i}>
                 <div className="media-content">
                   <div className="content">
                     <div>
                       <strong
-                        style={{ color: v.userId === userId ? "blue" : null }}
+                        style={{ color: v.userId === userId ? "darkmagenta" : null }}
                       >
                         {v.userNickname}
                       </strong>
-                      {v.recommendCount > 0 && <small> + {v.recommendCount}</small>}
+                      {v.recommendCount > 0 && (
+                        <small> + {v.recommendCount}</small>
+                      )}
                       <div className="mt-1 mb-1">{v.text}</div>
                       <small>
                         <a onClick={() => recommendComment(v)}>추천</a> ·{" "}

@@ -30,8 +30,25 @@ const createThumbnail = async (originalName, gameId) => {
   return thumbName
 }
 
+const makeFilter = ({searchName, dateSort}) => {
+  const filter = {}
+  if (searchName) {
+    filter["$or"] = [
+      { title: new RegExp(searchName, "gi") },
+      { desc: new RegExp(searchName, "gi") },
+    ]
+  }
+  if (dateSort === "month")
+    filter["created"] = { $gte: Date.now() - 1000 * 60 * 60 * 24 * 30 }
+  else if (dateSort === "week")
+    filter["created"] = { $gte: Date.now() - 1000 * 60 * 60 * 24 * 7 }
+  else if (dateSort === "day")
+    filter["created"] = { $gte: Date.now() - 1000 * 60 * 60 * 24 }
+  return filter
+}
+
 router.post("/create", jwtCheck, async (req, res) => {
-  if(!req.user) res.send("fail")
+  if (!req.user) res.send("fail")
   const { data } = req.body
 
   const game = await Game.create({
@@ -62,32 +79,27 @@ router.post("/create", jwtCheck, async (req, res) => {
 })
 
 router.post("/getList", async (req, res) => {
-  const { sortBy, dateSort, searchName } = req.body
-
-  const filter = {}
-  if (searchName) {
-    filter["$or"] = [
-      { title: new RegExp(searchName, "gi") },
-      { desc: new RegExp(searchName, "gi") },
-    ]
-  }
-  if (dateSort === "month")
-    filter["created"] = { $gte: Date.now() - 1000 * 60 * 60 * 24 * 30 }
-  else if (dateSort === "week")
-    filter["created"] = { $gte: Date.now() - 1000 * 60 * 60 * 24 * 7 }
-  else if (dateSort === "day")
-    filter["created"] = { $gte: Date.now() - 1000 * 60 * 60 * 24 }
+  const { sortBy, dateSort, searchName, page } = req.body
+  const filter = makeFilter({dateSort, searchName})
 
   const games = await Game.find(filter)
-    .sort(sortBy === "popular" ? { count: -1 } : { created: -1 })
     .select("title desc nickName thumbnail created seq")
-
+    .sort(sortBy === "popular" ? { count: -1 } : { created: -1 })
+    .skip(page * 10)
+    .limit(10)
   res.json(games)
 })
 
-router.post("/getGame", async(req, res) => {
-  const {seq} = req.body
-  const game = await Game.findOne({seq})
+router.post("/getCount", async (req, res) => {
+  const { sortBy, dateSort, searchName } = req.body
+  const filter = makeFilter({dateSort, searchName})
+  const count = await Game.countDocuments(filter)
+  res.json({count})
+})
+
+router.post("/getGame", async (req, res) => {
+  const { seq } = req.body
+  const game = await Game.findOne({ seq })
   game.count += 1
   game.save()
   res.json(game)
