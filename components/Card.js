@@ -1,5 +1,8 @@
 import React from "react"
 import Link from "next/link"
+import moment from "moment"
+import "moment/locale/ko"
+moment.locale("kr")
 
 const Card = ({ data }) => {
   const slicedDesc = data.desc.slice(0, 50)
@@ -28,7 +31,8 @@ const Card = ({ data }) => {
 
           <div className="content">
             {slicedDesc}
-            <time dateTime="2016-1-1">{data.created}</time>
+            <br />
+            <time dateTime="2016-1-1">{moment(data.created).format("LLL")}</time>
           </div>
         </div>
 
