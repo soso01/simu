@@ -31,6 +31,7 @@ const createThumbnail = async (originalName, gameId) => {
 }
 
 router.post("/create", jwtCheck, async (req, res) => {
+  if(!req.user) res.send("fail")
   const { data } = req.body
 
   const game = await Game.create({
@@ -87,6 +88,8 @@ router.post("/getList", async (req, res) => {
 router.post("/getGame", async(req, res) => {
   const {seq} = req.body
   const game = await Game.findOne({seq})
+  game.count += 1
+  game.save()
   res.json(game)
 })
 

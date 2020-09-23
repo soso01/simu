@@ -26,15 +26,12 @@ const create = () => {
   const [isLoading, setIsLoading] = useState(false)
   const [cookies, setCookies, removeCookies] = useCookies(["token"])
 
-  console.log(simData)
-
   useEffect(() => {
     const jwtCheck = async () => {
-      const res = await axios.post("/login/jwtVerify", { token: cookies.token })
+      const res = await axios.post("/login/isLogin", { token: cookies.token })
       if (res.data === "success") setIsLogin(true)
       else {
         setIsLogin(false)
-        removeCookies("token")
       }
     }
     if (cookies.token) jwtCheck()
@@ -340,14 +337,14 @@ const create = () => {
                                     {selectValue.action.actType === "movePage"
                                       ? simData.pages.map(
                                           (optionValue, optionIndex) => (
-                                            <option value={optionIndex}>
+                                            <option key={optionIndex} value={optionIndex}>
                                               페이지 {optionIndex + 1}
                                             </option>
                                           )
                                         )
                                       : page.script.map(
                                           (optionValue, optionIndex) => (
-                                            <option value={optionIndex}>
+                                            <option key={optionIndex} value={optionIndex}>
                                               스크립트 {optionIndex + 1}
                                             </option>
                                           )

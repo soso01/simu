@@ -9,17 +9,21 @@ const nav = () => {
   const [isLogin, setIsLogin] = useState(false)
   const [cookies, setCookies, removeCookies] = useCookies(["token"])
 
+
   useEffect(() => {
     const jwtCheck = async () => {
-      const res = await axios.post("/login/jwtVerify", { token: cookies.token })
+      const res = await axios.post("/login/isLogin", { token: cookies.token })
       if (res.data === "success") setIsLogin(true)
       else {
         setIsLogin(false)
-        removeCookies("token")
       }
     }
+    const setAnonymous = async () => {
+      const res = await axios.post("/login/getAnonymousToken")
+      setCookies('token', res.data)
+    }
     if (cookies.token) jwtCheck()
-    else setIsLogin(false)
+    else setAnonymous()
   }, [cookies.token])
 
   return (
@@ -55,12 +59,11 @@ const nav = () => {
             <Link href="create">
               <a className="navbar-item">시뮬레이션 만들기</a>
             </Link>
-            {
-              isLogin && (
-                <Link href="create">
-                  <a className="navbar-item">내 시뮬레이션</a>
-                </Link>)
-            }
+            {isLogin && (
+              <Link href="create">
+                <a className="navbar-item">내 시뮬레이션</a>
+              </Link>
+            )}
           </div>
 
           <div className="navbar-end">

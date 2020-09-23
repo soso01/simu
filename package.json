@@ -27,6 +27,7 @@
     "react-modal": "^3.11.2",
     "sass": "^1.26.10",
     "sharp": "^0.26.0",
+    "uuid": "^8.3.0",
     "webp-converter": "^2.3.0"
   }
 }

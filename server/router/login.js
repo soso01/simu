@@ -3,13 +3,26 @@ const router = express();
 
 const bcrypt = require("bcrypt");
 const jwt = require('jsonwebtoken')
+const { v4: uuidv4 } = require('uuid');
 
 const {User} = require('../db/model')
 const jwtCheck = require('../lib/jwtCheck')
 const {jwtSecret} = require('../lib/key')
 
-router.post('/jwtVerify', jwtCheck, (req, res) => {
-  res.send("success")
+router.post('/isLogin', jwtCheck, (req, res) => {
+  if(req.user) res.send("success")
+  else res.send("fail")
+})
+
+router.post("/getAnonymousToken", (req, res) => {
+  const token = jwt.sign({anonymousId : uuidv4()}, jwtSecret, { expiresIn: "30d"} )
+  res.json(token)
+})
+
+router.post("/getUserId", jwtCheck, (req, res) => {
+  const userId = req.user ? req.user.id : req.anonymousId
+
+  res.send(userId)
 })
 
 router.post("/", async (req, res) => {

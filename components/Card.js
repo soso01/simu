@@ -3,7 +3,6 @@ import Link from "next/link"
 
 const Card = ({ data }) => {
   const slicedDesc = data.desc.slice(0, 50)
-  console.log(data.desc,"/", slicedDesc)
   return (
     <div className="" style={{ width: 350, margin: 20 }}>
       <div className="column card">

@@ -5,8 +5,9 @@ const { User } = require('../db/model')
 module.exports = async (req, res, next) => {
   const {token} = req.body
   try {
-    const decoded = jwt.verify(token, jwtSecret);
+    const decoded = jwt.verify(token, jwtSecret)
     req.user = await User.findOne({id: decoded.id})
+    req.anonymousId = decoded.anonymousId
     next()
   } catch(err) {
     // err

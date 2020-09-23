@@ -30,8 +30,6 @@ const game = ({ game }) => {
   }
 
   const gameTextClick = () => {
-    console.log("clicked")
-    console.log(nowScript)
     if (scriptText.length > 0) {
       clearTimeout(addLetter)
       setPrintText(printText + scriptText)
@@ -121,7 +119,6 @@ export async function getServerSideProps({ req }) {
   const game = await axios.post("http://localhost:" + port + "/game/getGame", {
     seq: req.params.seq,
   })
-  console.log(game.data)
   return {
     props: {
       game: game.data,
