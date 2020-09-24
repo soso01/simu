@@ -7,7 +7,7 @@ import moment from "moment"
 import "moment/locale/ko"
 moment.locale("kr")
 
-const limitNum = 20
+const limitNum = 10
 
 const comment = ({ game, initBest, initComments, count }) => {
   const [cookies, setCookies, removeCookies] = useCookies(["token"])
@@ -16,6 +16,22 @@ const comment = ({ game, initBest, initComments, count }) => {
   const [comments, setComments] = useState(initComments)
   const [best, setBest] = useState(initBest)
   const [page, setPage] = useState(1)
+
+  const _infiniteScroll = () => {
+    let scrollHeight = Math.max(document.documentElement.scrollHeight, document.body.scrollHeight);
+    let scrollTop = Math.max(document.documentElement.scrollTop, document.body.scrollTop);
+    let clientHeight = document.documentElement.clientHeight;
+  
+    if(scrollTop + clientHeight === scrollHeight) {
+      if((page) * limitNum < count){ 
+        moreComment(limitNum)}
+    }
+  }
+  
+  useEffect(() => {
+    window.addEventListener('scroll', _infiniteScroll, true);
+    return () => window.removeEventListener('scroll', _infiniteScroll, true);
+  }, [_infiniteScroll]);
 
   useEffect(() => {
     const fetch = async () => {
@@ -166,7 +182,7 @@ const comment = ({ game, initBest, initComments, count }) => {
             <article className="media">
               <div className="media-content">
                 <div className="field">
-                  <p className="control">
+                  <div className="control">
                     <div style={{ margin: 10 }}>
                       <strong>댓글 ({count})</strong>
                     </div>
@@ -176,7 +192,7 @@ const comment = ({ game, initBest, initComments, count }) => {
                       value={inputText}
                       onChange={(e) => setInputText(e.target.value)}
                     ></textarea>
-                  </p>
+                  </div>
                 </div>
                 <div className="row">
                   <a className="button is-info" onClick={submitComment}>
@@ -259,14 +275,6 @@ const comment = ({ game, initBest, initComments, count }) => {
                 </div>
               </article>
             ))}
-            {page * limitNum < count && (
-              <button
-                className="button mt-4 mb-4 is-primary is-rounded is-fullwidth"
-                onClick={() => moreComment(limitNum)}
-              >
-                More
-              </button>
-            )}
           </div>
         </div>
       </div>

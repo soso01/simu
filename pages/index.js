@@ -11,6 +11,21 @@ const Home = () => {
   const [games, setGames] = useState([])
   const [page, setPage] = useState(0)
   const [count, setCount] = useState(0)
+
+  const _infiniteScroll = () => {
+    let scrollHeight = Math.max(document.documentElement.scrollHeight, document.body.scrollHeight);
+    let scrollTop = Math.max(document.documentElement.scrollTop, document.body.scrollTop);
+    let clientHeight = document.documentElement.clientHeight;
+  
+    if(scrollTop + clientHeight === scrollHeight) {
+      if((page + 1) * 10 < count) moreGames()
+    }
+  }
+  
+  useEffect(() => {
+    window.addEventListener('scroll', _infiniteScroll, true);
+    return () => window.removeEventListener('scroll', _infiniteScroll, true);
+  }, [_infiniteScroll]);
   
   useEffect(() => {
     const fetch = async () => {
@@ -60,16 +75,6 @@ const Home = () => {
           {games.map((v, i) => (
             <Card key={i} data={v} />
           ))}
-          {(page + 1) * 10 < count && (
-            <div style={{ width: "80%" }}>
-              <button
-                className="button mt-4 mb-4 is-primary is-rounded is-fullwidth"
-                onClick={moreGames}
-              >
-                More
-              </button>
-            </div>
-          )}
         </div>
       </main>
     </div>
