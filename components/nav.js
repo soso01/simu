@@ -60,7 +60,7 @@ const nav = () => {
               <a className="navbar-item">시뮬레이션 만들기</a>
             </Link>
             {isLogin && (
-              <Link href="create">
+              <Link href="mygame">
                 <a className="navbar-item">내 시뮬레이션</a>
               </Link>
             )}

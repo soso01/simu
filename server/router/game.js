@@ -5,7 +5,7 @@ const router = express()
 const sharp = require("sharp")
 const app = require("../index")
 
-const { Game, Image } = require("../db/model")
+const { Game, Image, Comment } = require("../db/model")
 const jwtCheck = require("../lib/jwtCheck")
 
 const createThumbnail = async (originalName, gameId) => {
@@ -47,6 +47,18 @@ const makeFilter = ({ searchName, dateSort }) => {
   return filter
 }
 
+router.post("/delete", jwtCheck, async (req, res) => {
+  const { seq } = req.body
+  const game = await Game.findOne({seq})
+  if(!req.user || game.userId !== req.user.id){
+    return res.json({result: "fail", msg: "시뮬레이션 제작자만 삭제할 수 있습니다."})
+  }
+  await Image.updateMany({gameId: game._id}, {gameId: null})
+  await Comment.deleteMany({gameSeq: seq})
+  game.remove()
+  return res.json({result: "success", msg: "해당 시뮬레이션이 삭제되었습니다."})
+})
+
 router.post("/create", jwtCheck, async (req, res) => {
   if (!req.user) res.send("fail")
   const { data } = req.body
@@ -78,21 +90,17 @@ router.post("/create", jwtCheck, async (req, res) => {
   res.json(game)
 })
 
-router.post("/getList", async (req, res) => {
-  const { sortBy, dateSort, searchName, page } = req.body
-  const filter = makeFilter({ dateSort, searchName })
-
-  const games = await Game.find(filter)
-    .select("title desc nickName thumbnail created seq")
-    .sort(sortBy === "popular" ? { recommendCount: -1 } : { created: -1 })
-    .skip(page * 10)
-    .limit(10)
-  res.json(games)
-})
-
 router.post("/getCount", async (req, res) => {
   const { sortBy, dateSort, searchName } = req.body
   const filter = makeFilter({ dateSort, searchName })
+  const count = await Game.countDocuments(filter)
+  res.json({ count })
+})
+
+router.post("/getUserCount", jwtCheck, async (req, res) => {
+  const { dateSort, searchName } = req.body
+  const filter = makeFilter({ dateSort, searchName })
+  filter.userId = req.user.id
   const count = await Game.countDocuments(filter)
   res.json({ count })
 })
@@ -147,6 +155,31 @@ router.post("/getGame", async (req, res) => {
     game.save()
   }
   res.json(game)
+})
+
+router.post("/getList", async (req, res) => {
+  const { sortBy, dateSort, searchName, page } = req.body
+  const filter = makeFilter({ dateSort, searchName })
+
+  const games = await Game.find(filter)
+    .select("title desc nickName thumbnail created seq")
+    .sort(sortBy === "popular" ? { recommendCount: -1 } : { created: -1 })
+    .skip(page * 10)
+    .limit(10)
+  res.json(games)
+})
+
+router.post("/getMyList", jwtCheck, async (req, res) => {
+  if (!req.user) return res.json("fail")
+  const { page, sortBy, dateSort, searchName } = req.body
+  const filter = makeFilter({ dateSort, searchName })
+  filter.userId = req.user.id
+  const games = await Game.find(filter)
+    .select("title desc nickName thumbnail created seq")
+    .sort(sortBy === "popular" ? { recommendCount: -1 } : { created: -1 })
+    .skip(page * 10)
+    .limit(10)
+  return res.json(games)
 })
 
 router.get("/:seq", async (req, res) => {

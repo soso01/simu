@@ -1,7 +1,7 @@
-import React, { useContext, useState } from "react"
+import React, { useContext, useState, useEffect } from "react"
 import { AppContext } from "../pages/_app"
 
-const SearchBar = () => {
+const SearchBar = ({initDateSort}) => {
   const {
     sortBy,
     setSortBy,
@@ -11,6 +11,12 @@ const SearchBar = () => {
     setSearchName,
   } = useContext(AppContext)
   const [tmpName, setTmpName] = useState("")
+
+  useEffect(() => {
+    if(initDateSort) setDateSort(initDateSort)
+    setSearchName("")
+  },[])
+
   return (
     <div
       className="columns is-mobile is-multiline is-centered"
