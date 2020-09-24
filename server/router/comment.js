@@ -98,7 +98,7 @@ router.post("/getMoreComments", async (req, res) => {
 router.post("/getComments", async (req, res) => {
   const { seq, page, limitNum } = req.body
 
-  const game = await Game.findOne({ seq }, "title desc nickName seq")
+  const game = await Game.findOne({ seq }, "title desc nickName seq count recommendCount")
 
   const initBest = await Comment.find(
     {

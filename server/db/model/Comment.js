@@ -8,8 +8,8 @@ var commentSchema = new Schema({
   text: { type: String },
   created: { type: Date, default: Date.now },
   accuseCount: {type: Number, default: 0},
-  recommendCount: {type: Number, default: 0},
   accuser: [String],
+  recommendCount: {type: Number, default: 0},
   recommender: [String],
 })
 

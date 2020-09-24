@@ -30,7 +30,7 @@ const createThumbnail = async (originalName, gameId) => {
   return thumbName
 }
 
-const makeFilter = ({searchName, dateSort}) => {
+const makeFilter = ({ searchName, dateSort }) => {
   const filter = {}
   if (searchName) {
     filter["$or"] = [
@@ -80,11 +80,11 @@ router.post("/create", jwtCheck, async (req, res) => {
 
 router.post("/getList", async (req, res) => {
   const { sortBy, dateSort, searchName, page } = req.body
-  const filter = makeFilter({dateSort, searchName})
+  const filter = makeFilter({ dateSort, searchName })
 
   const games = await Game.find(filter)
     .select("title desc nickName thumbnail created seq")
-    .sort(sortBy === "popular" ? { count: -1 } : { created: -1 })
+    .sort(sortBy === "popular" ? { recommendCount: -1 } : { created: -1 })
     .skip(page * 10)
     .limit(10)
   res.json(games)
@@ -92,16 +92,60 @@ router.post("/getList", async (req, res) => {
 
 router.post("/getCount", async (req, res) => {
   const { sortBy, dateSort, searchName } = req.body
-  const filter = makeFilter({dateSort, searchName})
+  const filter = makeFilter({ dateSort, searchName })
   const count = await Game.countDocuments(filter)
-  res.json({count})
+  res.json({ count })
+})
+
+router.post("/recommend", jwtCheck, async (req, res) => {
+  const { seq } = req.body
+  const userId = req.user ? req.user.id : req.anonymousId
+  if (!userId) return res.json({ result: "fail", msg: "추천 오류" })
+  const game = await Game.findOne({ seq })
+  if (game.userId === userId)
+    return res.json({
+      result: "fail",
+      msg: "자신의 시뮬레이션에 추천할 수 없습니다.",
+    })
+
+  if (game.recommender.includes(userId))
+    return res.json({ result: "fail", msg: "이미 추천한 시뮬레이션입니다." })
+
+  game.recommender.push(userId)
+  game.recommendCount = game.recommender.length
+  game.save()
+
+  return res.json({ result: "success", msg: "추천하였습니다." })
+})
+
+router.post("/accuse", jwtCheck, async (req, res) => {
+  const { seq } = req.body
+  const userId = req.user ? req.user.id : req.anonymousId
+  if (!userId) return res.json({ result: "fail", msg: "오류" })
+  const game = await Game.findOne({ seq })
+  if (game.userId === userId)
+    return res.json({
+      result: "fail",
+      msg: "자신의 시뮬레이션을 신고할 수 없습니다.",
+    })
+
+  if (game.accuser.includes(userId))
+    return res.json({ result: "fail", msg: "이미 신고한 시뮬레이션입니다." })
+
+  game.accuser.push(userId)
+  game.accuseCount = game.accuser.length
+  game.save()
+
+  return res.json({ result: "success", msg: "신고하였습니다." })
 })
 
 router.post("/getGame", async (req, res) => {
   const { seq } = req.body
   const game = await Game.findOne({ seq })
-  game.count += 1
-  game.save()
+  if (game) {
+    game.count += 1
+    game.save()
+  }
   res.json(game)
 })
 

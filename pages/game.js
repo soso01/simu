@@ -9,6 +9,8 @@ const game = ({ game }) => {
   const [isStartModal, setIsStartModal] = useState(true)
   const [isEndModal, setIsEndModal] = useState(false)
 
+  if(!game) return <h1>404 - Page Not Found</h1>
+
   const { pages } = game
 
   const [pageNum, setPageNum] = useState(0)

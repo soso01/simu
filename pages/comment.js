@@ -85,6 +85,25 @@ const comment = ({ game, initBest, initComments, count }) => {
     }
   }
 
+  const recommendGame = async () => {
+    const res = await axios.post("/game/recommend", {
+      token: cookies.token,
+      seq: game.seq,
+    })
+    alert(res.data.msg)
+    if (res.data.result === "success") {
+      Router.reload(window.location.pathname)
+    }
+  }
+
+  const accuseGame = async () => {
+    const res = await axios.post("/game/accuse", {
+      token: cookies.token,
+      seq: game.seq,
+    })
+    alert(res.data.msg)
+  }
+
   return (
     <div>
       <section className="hero is-small is-primary">
@@ -96,12 +115,54 @@ const comment = ({ game, initBest, initComments, count }) => {
         </div>
       </section>
 
-      <div className="columns is-mobile is-centered mt-6">
+      <div className="columns is-mobile is-centered mt-2 mb-6">
         <div className="column is-11-mobile is-8-tablet">
           <div className="box">
-            <div className="container mt-3 mb-6">
+            <div className="level is-mobile pt-3 pb-3">
+              <div className="level-item has-text-centered">
+                <div>
+                  <p className="heading">추천수</p>
+                  <p className="title">{game.recommendCount}</p>
+                </div>
+              </div>
+              {/* <div className="level-item has-text-centered">
+                <div>
+                  <p className="heading">조회수</p>
+                  <p className="title">{game.count} </p>
+                </div>
+              </div> */}
+              <div className="level-item has-text-centered">
+                <div>
+                  <p className="heading">댓글수</p>
+                  <p className="title">{count}</p>
+                </div>
+              </div>
+            </div>
+            <div className="container pt-3 pb-3">
               <div className="notification">{game.desc}</div>
             </div>
+
+            <p className="is-size-5 has-text-weight-semibold has-text-centered pt-3 pb-3">
+              이 시뮬레이션을{" "}
+            </p>
+            <div
+              className="field is-grouped"
+              style={{ display: "flex", justifyContent: "center" }}
+            >
+              <p className="control">
+                <button className="button is-link" onClick={recommendGame}>
+                  추천하기
+                </button>
+              </p>
+              <p className="control">
+                <button className="button" onClick={accuseGame}>
+                  신고하기
+                </button>
+              </p>
+            </div>
+
+            <hr />
+
             <article className="media">
               <div className="media-content">
                 <div className="field">
@@ -117,63 +178,63 @@ const comment = ({ game, initBest, initComments, count }) => {
                     ></textarea>
                   </p>
                 </div>
-                <nav className="level">
-                  <div className="level-left">
-                    <div className="level-item">
-                      <a className="button is-info" onClick={submitComment}>
-                        등록
-                      </a>
-                    </div>
-                  </div>
-                </nav>
+                <div className="row">
+                  <a className="button is-info" onClick={submitComment}>
+                    등록
+                  </a>
+                </div>
               </div>
             </article>
-            <div
-              style={{
-                backgroundColor: "aliceblue",
-                paddingTop: 20,
-                paddingBottom: 20,
-                paddingLeft: 5,
-                paddingRight: 5,
-                marginTop: 10,
-                marginBottom: 10,
-                borderRadius: 10
-              }}
-            >
-              {best.map((v, i) => (
-                <article className="media" key={i}>
-                  <div className="media-content">
-                    <div className="content">
-                      <div>
-                        <strong style={{ color: "blue" }}>Best) </strong>
-                        <strong>{v.userNickname}</strong>
-                        <small> + {v.recommendCount}</small>
-                        <div className="mt-1 mb-1">{v.text}</div>
-                        <small>
-                          <a onClick={() => recommendComment(v)}>추천</a> ·{" "}
-                          <a onClick={() => accuseComment(v)}>신고</a>
-                          {v.userId === userId && (
-                            <>
-                              {" · "}
-                              <a onClick={() => deleteComment(v)}>삭제</a>
-                            </>
-                          )}
-                          {"   @ "}
-                          {moment(v.created).fromNow()}
-                        </small>
+            {best.length > 0 && (
+              <div
+                style={{
+                  backgroundColor: "aliceblue",
+                  paddingTop: 20,
+                  paddingBottom: 20,
+                  paddingLeft: 5,
+                  paddingRight: 5,
+                  marginTop: 10,
+                  marginBottom: 10,
+                  borderRadius: 10,
+                }}
+              >
+                {best.map((v, i) => (
+                  <article className="media" key={i}>
+                    <div className="media-content">
+                      <div className="content">
+                        <div>
+                          <strong style={{ color: "blue" }}>Best) </strong>
+                          <strong>{v.userNickname}</strong>
+                          <small> + {v.recommendCount}</small>
+                          <div className="mt-1 mb-1">{v.text}</div>
+                          <small>
+                            <a onClick={() => recommendComment(v)}>추천</a> ·{" "}
+                            <a onClick={() => accuseComment(v)}>신고</a>
+                            {v.userId === userId && (
+                              <>
+                                {" · "}
+                                <a onClick={() => deleteComment(v)}>삭제</a>
+                              </>
+                            )}
+                            {"   @ "}
+                            {moment(v.created).fromNow()}
+                          </small>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                </article>
-              ))}
-            </div>
+                  </article>
+                ))}
+              </div>
+            )}
             {comments.map((v, i) => (
               <article className="media" key={i}>
                 <div className="media-content">
                   <div className="content">
                     <div>
                       <strong
-                        style={{ color: v.userId === userId ? "darkmagenta" : null }}
+                        style={{
+                          color: v.userId === userId ? "darkmagenta" : null,
+                        }}
                       >
                         {v.userNickname}
                       </strong>

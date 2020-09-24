@@ -9,7 +9,7 @@ export const AppContext = createContext()
 
 export default function MyApp({ Component, pageProps }) {
   const [sortBy, setSortBy] = useState("popular")
-  const [dateSort, setDateSort] = useState("all")
+  const [dateSort, setDateSort] = useState("month")
   const [searchName, setSearchName] = useState("")
   const initData = {
     sortBy,

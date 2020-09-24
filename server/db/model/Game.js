@@ -13,6 +13,10 @@ var gameSchema = new Schema({
   thumbnail: { type: String, default: 0 },
   count: { type: Number, default: 0 },
   created: { type: Date, default: Date.now },
+  accuseCount: {type: Number, default: 0},
+  accuser: [String],
+  recommendCount: {type: Number, default: 0},
+  recommender: [String],
   pages: [
     {
       img: String,
