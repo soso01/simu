@@ -3,6 +3,7 @@ import axios from "axios"
 import { useCookies } from "react-cookie"
 import Login from "./login"
 import Spinenr from "../components/Spinner"
+import xss from 'xss'
 
 const create = () => {
   const [simData, setSimData] = useState({

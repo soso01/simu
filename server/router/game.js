@@ -30,6 +30,18 @@ const createThumbnail = async (originalName, gameId) => {
   return thumbName
 }
 
+const checkGameValid = (data) => {
+  if(data.title.length < 5) return {result : "fail", msg : "제목은 최소 4글자 이상이어야 합니다."}
+  else if(data.title.length > 30) return {result : "fail", msg : "제목은 30글자 이하이어야 합니다."}
+  else if(data.desc.length < 10) return {result : "fail", msg : "설명은 10글자 이상이어야 합니다."}
+  else if(data.title.length > 2000) return {result : "fail", msg : "설명은 2000글자 이하이어야 합니다."}
+
+  for(let i = 0; i < data.pages.length; i++){
+    const page = data.pages[i];
+    
+  }
+}
+
 const makeFilter = ({ searchName, dateSort }) => {
   const filter = {}
   if (searchName) {

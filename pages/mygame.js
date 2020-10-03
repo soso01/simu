@@ -29,6 +29,7 @@ const mygame = () => {
 
   const moreGames = async () => {
     const res = await axios.post("/game/getMyList", {token: cookies.token, page, sortBy, dateSort, searchName})
+    console.log("more")
     if(res.data === "fail") return router.push('/login')
     setPage(page + 1)
     setGames([...games, ...res.data])
@@ -39,9 +40,8 @@ const mygame = () => {
     let scrollTop = Math.max(document.documentElement.scrollTop, document.body.scrollTop);
     let clientHeight = document.documentElement.clientHeight;
   
-    console.log(page, count)
     if(scrollTop + clientHeight === scrollHeight) {
-      if((page + 1) * 10 < count) {
+      if(page * 10 < count) {
         moreGames()
       }
     }
