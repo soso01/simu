@@ -19,6 +19,7 @@ app.prepare().then(() => {
   server.use('/image', require('./router/image'))
   server.use('/game', require('./router/game'))
   server.use('/comment', require('./router/comment'))
+  server.use('/update', require('./router/update'))
   
   server.get("*", (req, res) => {
     return handle(req, res)

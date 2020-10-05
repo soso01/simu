@@ -3,9 +3,8 @@ import axios from "axios"
 import { useCookies } from "react-cookie"
 import Login from "./login"
 import Spinenr from "../components/Spinner"
-import xss from 'xss'
 
-const create = () => {
+const create = ({ isUpdate, data }) => {
   const [simData, setSimData] = useState({
     title: "",
     desc: "",
@@ -27,8 +26,6 @@ const create = () => {
   const [isLoading, setIsLoading] = useState(false)
   const [cookies, setCookies, removeCookies] = useCookies(["token"])
 
-  console.log(simData)
-
   useEffect(() => {
     const jwtCheck = async () => {
       const res = await axios.post("/login/isLogin", { token: cookies.token })
@@ -42,9 +39,15 @@ const create = () => {
     setIsLoading(true)
   }, [cookies.token])
 
+  useEffect(() => {
+    if (isUpdate && data) {
+      setSimData({...data, thumbnail: 0})
+    }
+  }, [data])
+
   const uploadFile = async (e, page) => {
     const file = e.target.files[0]
-    if(!file) return null
+    if (!file) return null
     else if (
       file.type !== "image/jpeg" &&
       file.type !== "image/gif" &&
@@ -69,10 +72,16 @@ const create = () => {
   const submit = async () => {
     const res = await axios.post("/game/create", {
       data: simData,
-      token: cookies.token
+      token: cookies.token,
+      isUpdate
     })
-    if(res.data.result === "fail"){
+    if (res.data.result === "fail") {
       alert(res.data.msg)
+    }
+    else {
+      if(isUpdate) alert("수정되었습니다.")
+      else alert("생성되었습니다.")
+      window.location.href = '/';
     }
   }
 
@@ -122,9 +131,7 @@ const create = () => {
                 <p className="title is-4 row">
                   페이지 {i + 1}
                   {i === simData.thumbnail ? (
-                    <button
-                      className="button is-info is-small ml-4"
-                    >
+                    <button className="button is-info is-small ml-4">
                       현재 썸네일
                     </button>
                   ) : (
@@ -343,14 +350,20 @@ const create = () => {
                                     {selectValue.action.actType === "movePage"
                                       ? simData.pages.map(
                                           (optionValue, optionIndex) => (
-                                            <option key={optionIndex} value={optionIndex}>
+                                            <option
+                                              key={optionIndex}
+                                              value={optionIndex}
+                                            >
                                               페이지 {optionIndex + 1}
                                             </option>
                                           )
                                         )
                                       : page.script.map(
                                           (optionValue, optionIndex) => (
-                                            <option key={optionIndex} value={optionIndex}>
+                                            <option
+                                              key={optionIndex}
+                                              value={optionIndex}
+                                            >
                                               스크립트 {optionIndex + 1}
                                             </option>
                                           )
@@ -423,7 +436,7 @@ const create = () => {
             <div className="field row mt-6 mb-6">
               <div className="control">
                 <button className="button is-link mr-2" onClick={submit}>
-                  생성하기
+                  {isUpdate ? "수정하기" : "생성하기"}
                 </button>
               </div>
               <div className="control">

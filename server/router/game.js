@@ -250,16 +250,22 @@ router.post("/delete", jwtCheck, async (req, res) => {
 
 router.post("/create", jwtCheck, async (req, res) => {
   if (!req.user) res.send({ result: "fail", msg: "로그인이 필요합니다." })
-  const { data } = req.body
+  const { data, isUpdate } = req.body
 
   const validCheck = checkGameValid(data)
   if (validCheck.result === "fail") return res.json(validCheck)
 
-  const game = await Game.create({
-    ...data,
-    userId: req.user.id,
-    nickName: req.user.nickName,
-  })
+  let game
+  if(isUpdate){
+    game = await Game.findOneAndUpdate({seq: data.seq}, data)
+  }
+  else {
+    game = await Game.create({
+      ...data,
+      userId: req.user.id,
+      nickName: req.user.nickName,
+    })
+  }
   //썸네일 생성
   game.thumbnail = await createThumbnail(
     data.pages[data.thumbnail].img,

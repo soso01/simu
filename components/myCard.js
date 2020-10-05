@@ -57,7 +57,7 @@ const Card = ({ data }) => {
             <a className="card-footer-item">댓글</a>
           </Link>
 
-          <Link href={"/game/" + data.seq}>
+          <Link href={"/update/" + data.seq}>
             <a className="card-footer-item">수정</a>
           </Link>
             <a onClick={deleteGame} className="card-footer-item">삭제</a>
