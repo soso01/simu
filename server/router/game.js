@@ -30,16 +30,187 @@ const createThumbnail = async (originalName, gameId) => {
   return thumbName
 }
 
-const checkGameValid = (data) => {
-  if(data.title.length < 5) return {result : "fail", msg : "제목은 최소 4글자 이상이어야 합니다."}
-  else if(data.title.length > 30) return {result : "fail", msg : "제목은 30글자 이하이어야 합니다."}
-  else if(data.desc.length < 10) return {result : "fail", msg : "설명은 10글자 이상이어야 합니다."}
-  else if(data.title.length > 2000) return {result : "fail", msg : "설명은 2000글자 이하이어야 합니다."}
-
-  for(let i = 0; i < data.pages.length; i++){
-    const page = data.pages[i];
-    
+const clearVisit = (data) => {
+  for (let pi = 0; pi < data.pages.length; pi++) {
+    const page = data.pages[pi]
+    for (let sci = 0; sci < page.script.length; sci++) {
+      const script = page.script[sci]
+      if (script.select.length > 0) {
+        for (let sei = 0; sei < script.select.length; sei++) {
+          const select = script.select[sei]
+          select.visit = false
+        }
+      }
+      script.visit = false
+    }
   }
+}
+
+const dfs = (data, pi, sci, sei) => {
+  const target =
+    sei !== null
+      ? data.pages[pi].script[sci].select[sei]
+      : data.pages[pi].script[sci]
+  if (target.canExit) return true
+  if (target.visit) {
+    target.canExit = false
+  } else {
+    target.visit = true
+    if (sei === null && target.select.length > 0) {
+      for (let i = 0; i < target.select.length; i++) {
+        target.canExit = dfs(data, pi, sci, i) || target.canExit
+      }
+    } else {
+      if (target.action.actType === "exit") target.canExit = true
+      else if (target.action.actType === "movePage") {
+        target.canExit = dfs(data, target.action.num, 0, null)
+      } else if (target.action.actType === "moveScript") {
+        target.canExit = dfs(data, pi, target.action.num, null)
+      } else target.canExit = false
+    }
+  }
+  return target.canExit
+}
+
+const checkGameValid = (data) => {
+  if (data.title.length < 4)
+    return { result: "fail", msg: "제목은 최소 4글자 이상이어야 합니다." }
+  else if (data.title.length > 30)
+    return { result: "fail", msg: "제목은 30글자 이하이어야 합니다." }
+  else if (data.desc.length < 10)
+    return { result: "fail", msg: "설명은 10글자 이상이어야 합니다." }
+  else if (data.title.length > 2000)
+    return { result: "fail", msg: "설명은 2000글자 이하이어야 합니다." }
+
+  let exitCount = 0
+  for (let pi = 0; pi < data.pages.length; pi++) {
+    const page = data.pages[pi]
+    if (!page.img)
+      return { result: "fail", msg: pi + 1 + "번 페이지에 이미지가 없습니다." }
+    for (let si = 0; si < page.script.length; si++) {
+      const script = page.script[si]
+      if (script.select.length === 0) {
+        if (!script.action.actType)
+          return {
+            result: "fail",
+            msg:
+              pi +
+              1 +
+              "번 페이지의 " +
+              (si + 1) +
+              "번 스크립트 액션이 설정되지 않았습니다.",
+          }
+        else if (
+          script.action.actType === "movePage" &&
+          (script.action.num >= data.pages.length || !script.action.num)
+        ) {
+          return {
+            result: "fail",
+            msg:
+              pi +
+              1 +
+              "번 페이지의 " +
+              (si + 1) +
+              "번 스크립트 액션의 번호를 다시 설정해주세요.",
+          }
+        } else if (
+          script.action.actType === "moveScript" &&
+          (script.action.num >= page.script.length || !script.action.num)
+        ) {
+          return {
+            result: "fail",
+            msg:
+              pi +
+              1 +
+              "번 페이지의 " +
+              (si + 1) +
+              "번 스크립트 액션의 번호를 다시 설정해주세요.",
+          }
+        }
+        if (script.action.actType === "exit") exitCount += 1
+      } else {
+        for (let select_i = 0; select_i < script.select.length; select_i++) {
+          const select = script.select[select_i]
+          if (!select.action.actType)
+            return {
+              result: "fail",
+              msg:
+                pi +
+                1 +
+                "번 페이지의 " +
+                (si + 1) +
+                "번 스크립트" +
+                (script_i + 1) +
+                "번 선택지의 액션이 설정되지 않았습니다.",
+            }
+          else if (
+            select.action.actType === "movePage" &&
+            (select.action.num >= data.pages.length || !select.action.num)
+          ) {
+            return {
+              result: "fail",
+              msg:
+                pi +
+                1 +
+                "번 페이지의 " +
+                (si + 1) +
+                "번 스크립트 " +
+                (script_i + 1) +
+                "번 선택지 액션의 번호를 다시 설정해주세요.",
+            }
+          } else if (
+            select.action.actType === "moveScript" &&
+            (select.action.num >= page.script.length || !select.action.num)
+          ) {
+            return {
+              result: "fail",
+              msg:
+                pi +
+                1 +
+                "번 페이지의 " +
+                (si + 1) +
+                "번 스크립트 " +
+                (script_i + 1) +
+                "번 선택지 액션의 번호를 다시 설정해주세요.",
+            }
+          }
+          if (select.action.actType === "exit") exitCount += 1
+        }
+      }
+    }
+  }
+  if (exitCount === 0)
+    return { result: "fail", msg: "종료액션이 최소 하나이상 필요합니다." }
+
+  for (let pi = 0; pi < data.pages.length; pi++) {
+    const page = data.pages[pi]
+    for (let sci = 0; sci < page.script.length; sci++) {
+      const script = page.script[sci]
+      if (!script.canExit) {
+        clearVisit(data)
+        dfs(data, pi, sci, null)
+      }
+    }
+  }
+
+  for (let pi = 0; pi < data.pages.length; pi++) {
+    const page = data.pages[pi]
+    for (let si = 0; si < page.script.length; si++) {
+      const script = page.script[si]
+      if (!script.canExit)
+        return {
+          result: "fail",
+          msg:
+            pi +
+            1 +
+            "번 페이지의 " +
+            (si + 1) +
+            "번 스크립트가 종료 액션으로 연결되지 않습니다.",
+        }
+    }
+  }
+
+  return { result: "success" }
 }
 
 const makeFilter = ({ searchName, dateSort }) => {
@@ -61,19 +232,28 @@ const makeFilter = ({ searchName, dateSort }) => {
 
 router.post("/delete", jwtCheck, async (req, res) => {
   const { seq } = req.body
-  const game = await Game.findOne({seq})
-  if(!req.user || game.userId !== req.user.id){
-    return res.json({result: "fail", msg: "시뮬레이션 제작자만 삭제할 수 있습니다."})
+  const game = await Game.findOne({ seq })
+  if (!req.user || game.userId !== req.user.id) {
+    return res.json({
+      result: "fail",
+      msg: "시뮬레이션 제작자만 삭제할 수 있습니다.",
+    })
   }
-  await Image.updateMany({gameId: game._id}, {gameId: null})
-  await Comment.deleteMany({gameSeq: seq})
+  await Image.updateMany({ gameId: game._id }, { gameId: null })
+  await Comment.deleteMany({ gameSeq: seq })
   game.remove()
-  return res.json({result: "success", msg: "해당 시뮬레이션이 삭제되었습니다."})
+  return res.json({
+    result: "success",
+    msg: "해당 시뮬레이션이 삭제되었습니다.",
+  })
 })
 
 router.post("/create", jwtCheck, async (req, res) => {
-  if (!req.user) res.send("fail")
+  if (!req.user) res.send({ result: "fail", msg: "로그인이 필요합니다." })
   const { data } = req.body
+
+  const validCheck = checkGameValid(data)
+  if (validCheck.result === "fail") return res.json(validCheck)
 
   const game = await Game.create({
     ...data,

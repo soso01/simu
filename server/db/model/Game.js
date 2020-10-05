@@ -25,14 +25,14 @@ var gameSchema = new Schema({
           text: String,
           action: {
             actType: { type: String },
-            num: { type: Number, defaultValue: 0 },
+            num: { type: Number, defaultValue: null },
           },
           select: [
             {
               text: String,
               action: {
                 actType: { type: String },
-                num: { type: Number, defaultValue: 0 },
+                num: { type: Number, defaultValue: null },
               },
             },
           ],

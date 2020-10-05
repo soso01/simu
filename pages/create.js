@@ -16,7 +16,7 @@ const create = () => {
         script: [
           {
             text: "",
-            action: { actType: "", num: 0 },
+            action: { actType: "", num: "" },
             select: [],
           },
         ],
@@ -26,6 +26,8 @@ const create = () => {
   const [isLogin, setIsLogin] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const [cookies, setCookies, removeCookies] = useCookies(["token"])
+
+  console.log(simData)
 
   useEffect(() => {
     const jwtCheck = async () => {
@@ -65,10 +67,13 @@ const create = () => {
   }
 
   const submit = async () => {
-    await axios.post("/game/create", {
+    const res = await axios.post("/game/create", {
       data: simData,
       token: cookies.token
     })
+    if(res.data.result === "fail"){
+      alert(res.data.msg)
+    }
   }
 
   if (!isLoading) {
@@ -366,7 +371,7 @@ const create = () => {
                             text: "",
                             action: {
                               actType: "",
-                              num: 0,
+                              num: "",
                             },
                           })
                           setSimData({ ...simData })
@@ -384,7 +389,7 @@ const create = () => {
                     onClick={() => {
                       page.script.push({
                         text: "",
-                        action: { actType: "", num: 0 },
+                        action: { actType: "", num: "" },
                         select: [],
                       })
                       setSimData({ ...simData })
@@ -404,7 +409,7 @@ const create = () => {
                     script: [
                       {
                         text: "",
-                        action: { actType: "", num: 0 },
+                        action: { actType: "", num: "" },
                         select: [],
                       },
                     ],

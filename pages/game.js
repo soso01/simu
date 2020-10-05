@@ -104,7 +104,7 @@ const game = ({ game }) => {
                         key={i}
                         onClick={() => runAction(v.action)}
                       >
-                        {i} ) {v.text}
+                        {i+1} ) {v.text}
                       </p>
                     ))}
                 </div>
