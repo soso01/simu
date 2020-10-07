@@ -26,8 +26,8 @@ const login = () => {
       <section className="hero is-primary is-fullheight-with-navbar">
         <div className="hero-body">
           <div className="container">
-            <div className="columns is-centered">
-              <div className="column is-5-tablet is-4-desktop is-3-widescreen">
+            <div className="columns is-centered is-mobile">
+              <div className="column is-11-mobile is-5-tablet is-4-desktop is-3-widescreen">
                 <form action="" className="box">
                   <div className="field">
                     <label className="label">

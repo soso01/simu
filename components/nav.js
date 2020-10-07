@@ -64,7 +64,11 @@ const nav = () => {
           <div className="navbar-end">
             <div className="navbar-item">
               {isLogin ? (
+
                 <div className="buttons">
+                  <Link href="changePassword">
+                    <a className="button is-light">비번변경</a>
+                  </Link>
                   <a
                     className="button is-primary"
                     onClick={() => removeCookies("token")}
@@ -102,6 +106,16 @@ const nav = () => {
                 }}
               >
                 시뮬 만들기
+              </p>
+            </Link>
+            <Link href="changePassword">
+              <p
+                className="has-text-centered has-text-weight-semibold"
+                onClick={() => {
+                  setIsBurger(!isBurger)
+                }}
+              >
+                비밀번호 변경
               </p>
             </Link>
             <p
