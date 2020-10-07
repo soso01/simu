@@ -102,7 +102,7 @@ const checkGameValid = (data) => {
           }
         else if (
           script.action.actType === "movePage" &&
-          (script.action.num >= data.pages.length || !script.action.num)
+          (script.action.num >= data.pages.length || script.action.num === null)
         ) {
           return {
             result: "fail",
@@ -115,7 +115,7 @@ const checkGameValid = (data) => {
           }
         } else if (
           script.action.actType === "moveScript" &&
-          (script.action.num >= page.script.length || !script.action.num)
+          (script.action.num >= page.script.length || script.action.num === null)
         ) {
           return {
             result: "fail",
@@ -145,7 +145,7 @@ const checkGameValid = (data) => {
             }
           else if (
             select.action.actType === "movePage" &&
-            (select.action.num >= data.pages.length || !select.action.num)
+            (select.action.num >= data.pages.length || script.action.num === null)
           ) {
             return {
               result: "fail",
@@ -160,7 +160,7 @@ const checkGameValid = (data) => {
             }
           } else if (
             select.action.actType === "moveScript" &&
-            (select.action.num >= page.script.length || !select.action.num)
+            (select.action.num >= page.script.length || script.action.num === null)
           ) {
             return {
               result: "fail",
@@ -258,7 +258,10 @@ router.post("/create", jwtCheck, async (req, res) => {
 
   let game
   if (isUpdate) {
-    game = await Game.findOneAndUpdate({ seq: data.seq }, data)
+    game = await Game.findOne({ seq: data.seq })
+    game.title = data.title
+    game.desc = data.desc
+    game.pages = data.pages
   } else {
     game = await Game.create({
       ...data,
@@ -266,12 +269,13 @@ router.post("/create", jwtCheck, async (req, res) => {
       nickName: req.user.nickName,
     })
   }
+  console.log("before", game.thumbnail, data.thumbnail)
   //썸네일 생성
   game.thumbnail = await createThumbnail(
     data.pages[data.thumbnail].img,
     game._id
   )
-  game.save()
+  await game.save()
 
   const images = await Image.find({ gameId: game._id })
   for (let i = 0; i < images.length; i++) {

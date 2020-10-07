@@ -26,6 +26,8 @@ const create = ({ isUpdate, data }) => {
   const [isLoading, setIsLoading] = useState(false)
   const [cookies, setCookies, removeCookies] = useCookies(["token"])
 
+  console.log(simData)
+
   useEffect(() => {
     const jwtCheck = async () => {
       const res = await axios.post("/login/isLogin", { token: cookies.token })
@@ -324,6 +326,7 @@ const create = ({ isUpdate, data }) => {
                             <div className="control mr-2">
                               <div className="select">
                                 <select
+                                  value={selectValue.action.actType}
                                   onChange={(e) => {
                                     selectValue.action.actType = e.target.value
                                     setSimData({ ...simData })
@@ -340,6 +343,7 @@ const create = ({ isUpdate, data }) => {
                               {selectValue.action.actType && (
                                 <div className="select">
                                   <select
+                                    value={selectValue.action.num}
                                     onChange={(e) => {
                                       selectValue.action.num = e.target.value
                                       setSimData({ ...simData })
