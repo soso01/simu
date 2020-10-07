@@ -9,7 +9,6 @@ const nav = () => {
   const [isLogin, setIsLogin] = useState(false)
   const [cookies, setCookies, removeCookies] = useCookies(["token"])
 
-
   useEffect(() => {
     const jwtCheck = async () => {
       const res = await axios.post("/login/isLogin", { token: cookies.token })
@@ -20,7 +19,7 @@ const nav = () => {
     }
     const setAnonymous = async () => {
       const res = await axios.post("/login/getAnonymousToken")
-      setCookies('token', res.data)
+      setCookies("token", res.data)
     }
     if (cookies.token) jwtCheck()
     else setAnonymous()
@@ -32,11 +31,7 @@ const nav = () => {
         <div className="navbar-brand">
           <a className="navbar-item">
             <Link href="/">
-              <img
-                src="https://bulma.io/images/bulma-logo.png"
-                width="112"
-                height="28"
-              />
+                <img src="/logo.png" style={{height: "100% !important"}} width="112"/>
             </Link>
           </a>
 
@@ -97,36 +92,49 @@ const nav = () => {
         className={isBurger ? "burger" : "is-hidden"}
         style={{ marginTop: 10, marginBottom: 20 }}
       >
-        <Link href="login">
-          <p
-            className="has-text-centered has-text-weight-semibold"
-            onClick={() => {
-              setIsBurger(!isBurger)
-            }}
-          >
-            로그인
-          </p>
-        </Link>
-        <Link href="join">
-          <p
-            className="has-text-centered has-text-weight-semibold"
-            onClick={() => {
-              setIsBurger(!isBurger)
-            }}
-          >
-            회원가입
-          </p>
-        </Link>
-        <Link href="create">
-          <p
-            className="has-text-centered has-text-weight-semibold"
-            onClick={() => {
-              setIsBurger(!isBurger)
-            }}
-          >
-            만들기
-          </p>
-        </Link>
+        {isLogin ? (
+          <>
+            <Link href="create">
+              <p
+                className="has-text-centered has-text-weight-semibold"
+                onClick={() => {
+                  setIsBurger(!isBurger)
+                }}
+              >
+                시뮬 만들기
+              </p>
+            </Link>
+            <p
+              className="has-text-centered has-text-weight-semibold"
+              onClick={() => removeCookies("token")}
+            >
+              로그아웃
+            </p>
+          </>
+        ) : (
+          <>
+            <Link href="login">
+              <p
+                className="has-text-centered has-text-weight-semibold"
+                onClick={() => {
+                  setIsBurger(!isBurger)
+                }}
+              >
+                로그인
+              </p>
+            </Link>
+            <Link href="join">
+              <p
+                className="has-text-centered has-text-weight-semibold"
+                onClick={() => {
+                  setIsBurger(!isBurger)
+                }}
+              >
+                회원가입
+              </p>
+            </Link>
+          </>
+        )}
       </div>
     </>
   )
