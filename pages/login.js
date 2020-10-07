@@ -77,6 +77,11 @@ const login = () => {
                         <button type="button" className="button is-primary">가입</button>
                       </Link>
                     </div>
+                    <div className="field mr-2">
+                      <Link href="findPassword">
+                        <button type="button" className="button is-primary">비번찾기</button>
+                      </Link>
+                    </div>
                     <div className="field ml-2">
                       <button className="button is-success" onClick={submit}>로그인</button>
                     </div>
