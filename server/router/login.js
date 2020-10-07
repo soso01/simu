@@ -14,6 +14,13 @@ router.post('/isLogin', jwtCheck, (req, res) => {
   else res.send("fail")
 })
 
+router.post("/isAdmin", jwtCheck, (req, res) => {
+  if(req.user && req.user.isAdmin){
+    return res.send(true)
+  }
+  else return res.send(false)
+})
+
 router.post("/getAnonymousToken", (req, res) => {
   const token = jwt.sign({anonymousId : uuidv4()}, jwtSecret, { expiresIn: "30d"} )
   res.json(token)

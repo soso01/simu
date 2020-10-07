@@ -94,7 +94,7 @@ const comment = ({ game, initBest, initComments, count }) => {
     if (confirm("댓글을 삭제하겠습니까?")) {
       const res = await axios.post("/comment/delete", {
         token: cookies.token,
-        commentId: comments._id,
+        _id: comment._id,
       })
       alert(res.data.msg)
       Router.reload(window.location.pathname)

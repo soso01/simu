@@ -6,7 +6,8 @@ var userSchema = new Schema({
   password: { type: String, required: true, trim: true },
   nickName: { type: String, required: true, trim: true, unique: true},
   email: {type: String, required: true, unique: true},
-  banDate: {type: Date, default: Date.now}
+  banDate: {type: Date, default: Date.now},
+  isAdmin: {type: Boolean, default: false}
 });
 
 module.exports = mongoose.model('User', userSchema);

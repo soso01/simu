@@ -233,7 +233,8 @@ const makeFilter = ({ searchName, dateSort }) => {
 router.post("/delete", jwtCheck, async (req, res) => {
   const { seq } = req.body
   const game = await Game.findOne({ seq })
-  if (!req.user || game.userId !== req.user.id) {
+  const isAdmin = req.user ? req.user.isAdmin : false
+  if ((!req.user || game.userId !== req.user.id) && !isAdmin) {
     return res.json({
       result: "fail",
       msg: "시뮬레이션 제작자만 삭제할 수 있습니다.",
@@ -256,10 +257,9 @@ router.post("/create", jwtCheck, async (req, res) => {
   if (validCheck.result === "fail") return res.json(validCheck)
 
   let game
-  if(isUpdate){
-    game = await Game.findOneAndUpdate({seq: data.seq}, data)
-  }
-  else {
+  if (isUpdate) {
+    game = await Game.findOneAndUpdate({ seq: data.seq }, data)
+  } else {
     game = await Game.create({
       ...data,
       userId: req.user.id,
@@ -339,10 +339,28 @@ router.post("/accuse", jwtCheck, async (req, res) => {
     return res.json({ result: "fail", msg: "이미 신고한 시뮬레이션입니다." })
 
   game.accuser.push(userId)
-  game.accuseCount = game.accuser.length
+  game.accuseCount += 1
   game.save()
 
   return res.json({ result: "success", msg: "신고하였습니다." })
+})
+
+router.post("/getAccusedGames", jwtCheck, async (req, res) => {
+  if (!req.user || !req.user.isAdmin) {
+    return res.send({})
+  }
+  const games = await Game.find({ accuseCount: { $gte: 5 } }).select(
+    "title desc nickName thumbnail created seq"
+  )
+  res.json(games)
+})
+
+router.post("/clearAccuseGame", jwtCheck, async ( req, res ) => {
+  if (!req.user || !req.user.isAdmin) {
+    return res.send({})
+  }
+  await Game.findOneAndUpdate({_id : req.body._id}, {accuseCount: -10})
+  res.send("success")
 })
 
 router.post("/getGame", async (req, res) => {

@@ -2,6 +2,7 @@ const express = require("express")
 const app = require("../index")
 const { Game, Comment } = require("../db/model")
 const jwtCheck = require("../lib/jwtCheck")
+const { findOneAndUpdate } = require("../db/model/Game")
 
 const router = express()
 
@@ -61,18 +62,38 @@ router.post("/accuse", jwtCheck, async (req, res) => {
     return res.json({ result: "fail", msg: "이미 신고한 댓글입니다." })
 
   comment.accuser.push(userId)
-  comment.accuseCount = comment.accuser.length
+  comment.accuseCount += 1
   comment.save()
 
   return res.json({ result: "success", msg: "신고하였습니다." })
 })
 
+router.post("/getAccusedComments", jwtCheck, async (req, res) => {
+  if (!req.user || !req.user.isAdmin) {
+    return res.send({})
+  }
+  const comments = await Comment.find({ accuseCount: { $gte: 5 } }).select(
+    "userNickname _id text recommendCount created userId"
+  )
+  res.json(comments)
+})
+
+router.post("/clearAccuseComment", jwtCheck, async (req, res) => {
+  if (!req.user || !req.user.isAdmin) {
+    return res.send({})
+  }
+  await Comment.findOneAndUpdate({_id : req.body._id}, {accuseCount: -10})
+  res.send("success")
+})
+
 router.post("/delete", jwtCheck, async (req, res) => {
-  const { commentId } = req.body
+  const { _id } = req.body
   const userId = req.user ? req.user.id : req.anonymousId
+  const isAdmin = req.user ? req.user.isAdmin : false
   if (!userId) return res.json({ result: "fail", msg: "오류" })
-  const comment = await Comment.findOne({ _id: commentId })
-  if (comment.userId !== userId)
+  const comment = await Comment.findOne({ _id })
+  console.log(comment)
+  if (comment.userId !== userId && !isAdmin)
     return res.json({
       result: "fail",
       msg: "본인의 댓글이 아닙니다.",
@@ -98,7 +119,10 @@ router.post("/getMoreComments", async (req, res) => {
 router.post("/getComments", async (req, res) => {
   const { seq, page, limitNum } = req.body
 
-  const game = await Game.findOne({ seq }, "title desc nickName seq count recommendCount")
+  const game = await Game.findOne(
+    { seq },
+    "title desc nickName seq count recommendCount"
+  )
 
   const initBest = await Comment.find(
     {
@@ -119,7 +143,7 @@ router.post("/getComments", async (req, res) => {
     .skip(page * limitNum)
     .limit(limitNum)
 
-  const count = await Comment.countDocuments({gameSeq : seq})
+  const count = await Comment.countDocuments({ gameSeq: seq })
 
   res.json({ game, initBest, initComments, count })
 })
