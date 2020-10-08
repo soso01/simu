@@ -3,7 +3,7 @@ import "../public/scss/global.scss"
 import "@fortawesome/fontawesome-free/css/all.min.css"
 import React, { useState, createContext } from "react"
 import { CookiesProvider } from "react-cookie"
-import Nav from "../components/Nav"
+import Nav from "../components/nav"
 import Head from "next/head"
 
 export const AppContext = createContext()
