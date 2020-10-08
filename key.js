@@ -1,4 +1,4 @@
 module.exports = {
-  port: 443,
+  port: 80,
   node_env: "production"
 }
