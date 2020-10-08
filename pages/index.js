@@ -63,7 +63,38 @@ const Home = () => {
   return (
     <div>
       <Head>
-        <title>Home</title>
+        <title>SIMU - 시뮬레이션 커뮤니티 시무</title>
+        <meta name="description" content="만화 아이돌 애니 드라마 미연시 등 각종 장르의 팬픽 시뮬레이션 게임을 제공하는 사이트입니다."></meta>
+        <meta name="keyword" content="만화, 애니, 아이돌, 팬픽, 시뮬레이션, 웹게임, 미연시"></meta>
+
+        <meta property="og:locale" content="ko_KR" />
+        <meta property="og:type" content="website"></meta>
+        <meta
+          property="og:url"
+          content="https://simu.kr/"
+        ></meta>
+        <meta
+          property="og:title"
+          content="SIMU - 시뮬레이션 커뮤니티 시무"
+        ></meta>
+        <meta
+          property="og:description"
+          content="만화 아이돌 애니 드라마 미연시 등 각종 장르의 팬픽 시뮬레이션 게임을 제공하는 사이트입니다."
+        ></meta>
+
+        <meta name="twitter:card" content="summary"></meta>
+        <meta
+          name="twitter:title"
+          content="SIMU - 시뮬레이션 커뮤니티 시무"
+        ></meta>
+        <meta
+          name="twitter:description"
+          content="만화 아이돌 애니 드라마 미연시 등 각종 장르의 팬픽 시뮬레이션 게임을 제공하는 사이트입니다."
+        ></meta>
+        <meta
+          name="twitter:domain"
+          content="https://simu.kr/"
+        ></meta>
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main>

@@ -36,8 +36,6 @@ router.post("/getUserId", jwtCheck, (req, res) => {
 
 router.post("/changePassword", jwtCheck, async (req, res) => {
   const { nowPassword, changePassword } = req.body
-  console.log(req.body)
-  console.log(req.user)
   if(!req.user) return res.json({result: "fail", msg: "로그인이 필요합니다."})
   else if (!bcrypt.compareSync(nowPassword, req.user.password)){
     return res.json({result: "fail", msg: "비밀번호가 일치하지 않습니다."})
