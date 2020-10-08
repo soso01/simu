@@ -87,6 +87,10 @@ const create = ({ isUpdate, data }) => {
     }
   }
 
+  const preview = async () => {
+    
+  }
+
   if (!isLoading) {
     return <Spinenr></Spinenr>
   }
@@ -478,7 +482,7 @@ const create = ({ isUpdate, data }) => {
                     </button>
                   </div>
                   <div className="control">
-                    <button className="button is-link is-light ml-2">
+                    <button className="button is-link is-light ml-2" onClick={preview}>
                       미리보기
                     </button>
                   </div>

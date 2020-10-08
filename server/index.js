@@ -3,6 +3,7 @@ const next = require("next")
 
 const db = require('./db')
 const garbageImage = require('./lib/garbageImage')
+const createSiteMap = require('./lib/createSiteMap')
 
 const dev = process.env.NODE_ENV !== "production"
 const app = next({ dev })
@@ -20,6 +21,8 @@ app.prepare().then(() => {
   server.use('/game', require('./router/game'))
   server.use('/comment', require('./router/comment'))
   server.use('/update', require('./router/update'))
+
+  createSiteMap()
   
   server.get("*", (req, res) => {
     return handle(req, res)

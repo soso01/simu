@@ -128,6 +128,10 @@ const comment = ({ game, initBest, initComments, count }) => {
     alert(res.data.msg)
   }
 
+  if(!game){
+    return <div>Not found</div>
+  }
+
   return (
     <div>
       <Head>
