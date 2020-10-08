@@ -5,7 +5,7 @@ import Head from "next/head"
 import Modal from "../components/Modal"
 import { useRouter } from "next/router"
 
-const game = ({ game }) => {
+const game = ({ game, isPreview, togglePreview }) => {
   const router = useRouter()
   const [isStartModal, setIsStartModal] = useState(true)
   const [isEndModal, setIsEndModal] = useState(false)
@@ -127,7 +127,7 @@ const game = ({ game }) => {
             "수고하셨습니다."
           }
           buttonText="종료"
-          onClickFunc={() => router.push("/comment/" + game.seq)}
+          onClickFunc={() => isPreview ? togglePreview() : router.push("/comment/" + game.seq)}
         />
         <section className="hero is-dark is-bold is-fullheight-with-navbar">
           <div className="hero-body">

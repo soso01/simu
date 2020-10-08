@@ -269,7 +269,6 @@ router.post("/create", jwtCheck, async (req, res) => {
       nickName: req.user.nickName,
     })
   }
-  console.log("before", game.thumbnail, data.thumbnail)
   //썸네일 생성
   game.thumbnail = await createThumbnail(
     data.pages[data.thumbnail].img,

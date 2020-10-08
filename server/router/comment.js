@@ -92,7 +92,6 @@ router.post("/delete", jwtCheck, async (req, res) => {
   const isAdmin = req.user ? req.user.isAdmin : false
   if (!userId) return res.json({ result: "fail", msg: "오류" })
   const comment = await Comment.findOne({ _id })
-  console.log(comment)
   if (comment.userId !== userId && !isAdmin)
     return res.json({
       result: "fail",

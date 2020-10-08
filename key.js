@@ -1,3 +1,4 @@
 module.exports = {
-  port: 3000
+  port: 403,
+  node_env: "production"
 }

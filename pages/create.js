@@ -4,6 +4,7 @@ import { useCookies } from "react-cookie"
 import Login from "./login"
 import Head from "next/head"
 import Spinenr from "../components/Spinner"
+import Game from "./game"
 
 const create = ({ isUpdate, data }) => {
   const [simData, setSimData] = useState({
@@ -25,6 +26,7 @@ const create = ({ isUpdate, data }) => {
   })
   const [isLogin, setIsLogin] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
+  const [isPreview, setIsPreview] = useState(false)
   const [cookies, setCookies, removeCookies] = useCookies(["token"])
 
   console.log(simData)
@@ -87,20 +89,37 @@ const create = ({ isUpdate, data }) => {
     }
   }
 
-  const preview = async () => {
-    
-  }
-
   if (!isLoading) {
     return <Spinenr></Spinenr>
   }
   if (!isLogin) {
     return <Login></Login>
+  }
+  if (isPreview) {
+    return (
+      <>
+        <div className="row">
+          <button
+            className="button is-info is-small ml-4"
+            onClick={() => setIsPreview(!isPreview)}
+          >
+            미리보기 종료
+          </button>
+        </div>
+        <Game
+          game={simData}
+          isPreview={true}
+          togglePreview={() => setIsPreview(!isPreview)}
+        ></Game>
+      </>
+    )
   } else
     return (
       <div>
         <Head>
-          <title>{isUpdate ? "수정하기" : "만들기"} - 시뮬레이션 커뮤니티 시무</title>
+          <title>
+            {isUpdate ? "수정하기" : "만들기"} - 시뮬레이션 커뮤니티 시무
+          </title>
           <meta
             name="description"
             content="만화 아이돌 애니 드라마 미연시 등 각종 장르의 팬픽 시뮬레이션 게임을 제공하는 사이트입니다."
@@ -482,7 +501,10 @@ const create = ({ isUpdate, data }) => {
                     </button>
                   </div>
                   <div className="control">
-                    <button className="button is-link is-light ml-2" onClick={preview}>
+                    <button
+                      className="button is-link is-light ml-2"
+                      onClick={() => setIsPreview(!isPreview)}
+                    >
                       미리보기
                     </button>
                   </div>
