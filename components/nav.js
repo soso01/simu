@@ -16,7 +16,7 @@ const nav = () => {
       else {
         setIsLogin(false)
       }
-    }
+    } 
     const setAnonymous = async () => {
       const res = await axios.post("/login/getAnonymousToken")
       setCookies("token", res.data)
