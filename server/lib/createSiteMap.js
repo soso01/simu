@@ -28,6 +28,7 @@ const createSiteMap = () => {
       hostname: "https://simu.kr",
       destinationDir: "./public/",
       sourceData,
+      gzip: false
     }).then(() => {
       // Do follow up actions
     })
