@@ -5,8 +5,8 @@ const db = require('./db')
 const garbageImage = require('./lib/garbageImage')
 const createSiteMap = require('./lib/createSiteMap')
 
-const { port, node_env } = require('../key')
-const app = next({ node_env })
+const { port, env } = require('../key')
+const app = next({dev : env === "dev"})
 const handle = app.getRequestHandler()
 
 app.prepare().then(() => {

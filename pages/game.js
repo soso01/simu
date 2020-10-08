@@ -109,7 +109,6 @@ const game = ({ game, isPreview, togglePreview }) => {
           name="twitter:domain"
           content={"https://simu.kr/game/" + game.seq}
         ></meta>
-        <link rel="icon" href="/favicon.ico" />
       </Head>
       <main>
         <Modal

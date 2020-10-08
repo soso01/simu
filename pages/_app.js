@@ -39,6 +39,7 @@ export default function MyApp({ Component, pageProps }) {
               `,
             }}
           />
+          <link rel="icon" href="/favicon.ico"/>
         </Head>
         <Nav />
         <Component {...pageProps} />

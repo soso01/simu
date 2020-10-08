@@ -95,7 +95,7 @@ const Home = () => {
           name="twitter:domain"
           content="https://simu.kr/"
         ></meta>
-        <link rel="icon" href="/favicon.ico" />
+        <link rel="icon" href="/favicon.ico"/>
       </Head>
       <main>
         <SearchBar />

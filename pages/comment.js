@@ -174,7 +174,6 @@ const comment = ({ game, initBest, initComments, count }) => {
           name="twitter:domain"
           content={"https://simu.kr/comment/" + game.seq}
         ></meta>
-        <link rel="icon" href="/favicon.ico" />
       </Head>
       <main>
         <div>

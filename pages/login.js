@@ -34,7 +34,6 @@ const login = () => {
           name="keyword"
           content="만화, 애니, 아이돌, 팬픽, 시뮬레이션, 웹게임, 미연시"
         ></meta>
-        <link rel="icon" href="/favicon.ico" />
       </Head>
       <main>
         <section className="hero is-primary is-fullheight-with-navbar">
