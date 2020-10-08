@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url>
+    <loc>https://simu.kr/</loc>
+  </url>
+  <url>
+    <loc>https://simu.kr/login/</loc>
+  </url>
+  <url>
+    <loc>https://simu.kr/join/</loc>
+  </url>
+  <url>
+    <loc>https://simu.kr/changePassword/</loc>
+  </url>
+  <url>
+    <loc>https://simu.kr/findPassword</loc>
+  </url>
+</urlset>
