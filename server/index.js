@@ -1,34 +1,48 @@
 const express = require("express")
 const next = require("next")
+const https = require("https")
+const fs = require("fs")
 
-const db = require('./db')
-const garbageImage = require('./lib/garbageImage')
-const createSiteMap = require('./lib/createSiteMap')
+const db = require("./db")
+const garbageImage = require("./lib/garbageImage")
+const createSiteMap = require("./lib/createSiteMap")
 
-const { port, env } = require('../key')
-const app = next({dev : env === "dev"})
+const { port, env } = require("../key")
+const app = next({ dev: env === "dev" })
 const handle = app.getRequestHandler()
+
+const certificate = fs.readFileSync(__dirname + "/ssl/cert.pem")
+const privateKey = fs.readFileSync(__dirname + "/ssl/key.pem")
 
 app.prepare().then(() => {
   garbageImage()
   const server = express()
 
   server.use(express.json())
-  server.use("/join", require('./router/join'))
+  server.use("/join", require("./router/join"))
   server.use("/login", require("./router/login"))
-  server.use('/image', require('./router/image'))
-  server.use('/game', require('./router/game'))
-  server.use('/comment', require('./router/comment'))
-  server.use('/update', require('./router/update'))
+  server.use("/image", require("./router/image"))
+  server.use("/game", require("./router/game"))
+  server.use("/comment", require("./router/comment"))
+  server.use("/update", require("./router/update"))
 
   createSiteMap()
-  
+
+  const options = {
+    key: privateKey,
+    cert: certificate,
+  }
+
   server.get("*", (req, res) => {
     return handle(req, res)
   })
   server.listen(port, (err) => {
     if (err) console.log("listen err : ", err)
     console.log("port " + port + " on")
+  })
+  const httpsServer = https.createServer(options, server)
+  httpsServer.listen(443, function () {
+    console.log("HTTPS server listening on port " + 443)
   })
 })
 
