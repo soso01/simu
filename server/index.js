@@ -7,8 +7,9 @@ const db = require("./db")
 const garbageImage = require("./lib/garbageImage")
 const createSiteMap = require("./lib/createSiteMap")
 
-const { port, env } = require("../key")
-const app = next({ dev: env === "dev" })
+const { port } = require("../key")
+const dev = process.env.NODE_ENV !== 'production'
+const app = next({ dev })
 const handle = app.getRequestHandler()
 
 const certificate = fs.readFileSync(__dirname + "/ssl/cert.pem")
