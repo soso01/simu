@@ -108,6 +108,16 @@ const nav = () => {
                 시뮬 만들기
               </p>
             </Link>
+            <Link href="mygame">
+              <p
+                className="has-text-centered has-text-weight-semibold"
+                onClick={() => {
+                  setIsBurger(!isBurger)
+                }}
+              >
+                내 시뮬레이터
+              </p>
+            </Link>
             <Link href="changePassword">
               <p
                 className="has-text-centered has-text-weight-semibold"
