@@ -8,7 +8,7 @@ const garbageImage = require("./lib/garbageImage")
 const createSiteMap = require("./lib/createSiteMap")
 
 const { port } = require("../key")
-const dev = process.env.NODE_ENV !== 'production'
+const dev = process.env.NODE_ENV !== "production"
 const app = next({ dev })
 const handle = app.getRequestHandler()
 
@@ -33,6 +33,18 @@ app.prepare().then(() => {
     key: privateKey,
     cert: certificate,
   }
+
+  server.all("*", (req, res, next) => {
+    let protocol = req.headers["x-forwarded-proto"] || req.protocol
+    if (protocol == "https") {
+      next()
+    } else {
+      let from = `${protocol}://${req.hostname}${req.url}`
+      let to = `https://${req.hostname}${req.url}` // log and redirect
+      console.log(`[${req.method}]: ${from} -> ${to}`)
+      res.redirect(to)
+    }
+  })
 
   server.get("*", (req, res) => {
     return handle(req, res)

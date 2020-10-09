@@ -90,8 +90,8 @@ const join = () => {
         <section className="hero is-primary is-fullheight-with-navbar">
           <div className="hero-body">
             <div className="container">
-              <div className="columns is-centered">
-                <div className="column is-6-tablet is-6-desktop is-5-widescreen">
+              <div className="columns is-centered is-mobile">
+                <div className="column is-11-mobile is-6-tablet is-6-desktop is-5-widescreen">
                   <form className="box">
                     <div className="field">
                       <label className="label">아이디</label>
