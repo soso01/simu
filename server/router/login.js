@@ -49,8 +49,9 @@ router.post("/changePassword", jwtCheck, async (req, res) => {
 
 router.post("/", async (req, res) => {
   const { id, password, longExp } = req.body
-  const result = await User.findOne({ id })
-  if (result === null) return res.send("fail")
+  
+	const result = await User.findOne({ id })
+	if (result === null) return res.send("fail")
   else if (!bcrypt.compareSync(password, result.password)) {
     res.send("fail")
   } else {

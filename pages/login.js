@@ -14,7 +14,8 @@ const login = () => {
     if (!id || !password)
       return alert("아이디와 패스워드를 입력하지 않았습니다.")
     const res = await axios.post("/login", { id, password, longExp })
-    if (res.data === "fail") {
+  
+	  if (res.data === "fail") {
       alert("아이디 혹은 비밀번호가 올바르지 않습니다.")
     } else {
       setCookie("token", res.data)
@@ -41,7 +42,7 @@ const login = () => {
             <div className="container">
               <div className="columns is-centered is-mobile">
                 <div className="column is-11-mobile is-5-tablet is-4-desktop is-3-widescreen">
-                  <form action="" className="box">
+                  <div className="box">
                     <div className="field">
                       <label className="label">아이디</label>
                       <div className="control has-icons-left">
@@ -104,7 +105,7 @@ const login = () => {
                         </button>
                       </div>
                     </div>
-                  </form>
+                  </div>
                 </div>
               </div>
             </div>
