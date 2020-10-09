@@ -122,12 +122,14 @@ const game = ({ game, isPreview, togglePreview }) => {
           active={isEndModal}
           title="시뮬레이션이 종료되었습니다."
           content={
-            "수고하셨습니다.\n",
-            "응원댓글은 시뮬레이션 제작자에게 큰 힘이됩니다!\n",
+            "수고하셨습니다.\n" +
+            "응원댓글은 시뮬레이션 제작자에게 큰 힘이됩니다!\n" +
             "재미있었다면 링크를 공유해주세요!\n"
           }
           buttonText="종료"
-          onClickFunc={() => isPreview ? togglePreview() : router.push("/comment/" + game.seq)}
+          onClickFunc={() =>
+            isPreview ? togglePreview() : router.push("/comment/" + game.seq)
+          }
         />
         <section className="hero is-dark is-bold is-fullheight-with-navbar">
           <div className="hero-body">
