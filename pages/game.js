@@ -4,6 +4,7 @@ import { port } from "../key"
 import Head from "next/head"
 import Modal from "../components/Modal"
 import { useRouter } from "next/router"
+import { now } from "moment"
 
 const game = ({ game, isPreview, togglePreview }) => {
   const router = useRouter()
@@ -43,6 +44,14 @@ const game = ({ game, isPreview, togglePreview }) => {
       }
     }
   }
+
+  //image preload
+  useEffect(() => {
+    pages.forEach(v => {
+      let img = new Image(); 
+      img.src = "/image/" + v.img;
+    })
+  }, [pages])
 
   useEffect(() => {
     setPrintText("")
