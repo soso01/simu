@@ -87,7 +87,7 @@ const join = () => {
         ></meta>
       </Head>
       <main>
-        <section className="hero is-primary is-fullheight-with-navbar">
+        <section className="hero is-mobile is-primary is-fullheight-with-navbar">
           <div className="hero-body">
             <div className="container">
               <div className="columns is-centered is-mobile">

@@ -66,3 +66,11 @@
 .navbar-item img {
   max-height: none;
 }
+
+.columns {
+  margin: 0;
+  padding: 0.75rem;
+  &:last-child{
+    margin: 0;
+  }
+}
