@@ -24,7 +24,7 @@ const create = ({ isUpdate, data }) => {
       },
     ],
   })
-
+	console.log(simData);
   const [isLogin, setIsLogin] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const [isPreview, setIsPreview] = useState(false)
