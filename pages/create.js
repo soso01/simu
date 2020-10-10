@@ -37,10 +37,13 @@ const create = ({ isUpdate, data }) => {
       else {
         setIsLogin(false)
       }
+      setIsLoading(true)
     }
     if (cookies.token) jwtCheck()
-    else setIsLogin(false)
-    setIsLoading(true)
+    else {
+      setIsLogin(false)
+      setIsLoading(true)
+    }
   }, [cookies.token])
 
   useEffect(() => {
@@ -140,10 +143,19 @@ const create = ({ isUpdate, data }) => {
                     <p>- 페이지 : 이미지 단위의 구분</p>
                     <p>- 스크립트 : 같은 페이지 내의 텍스트의 구분</p>
                     <p>- 모든 페이지에는 이미지가 반드시 필요합니다.</p>
-                    <p>- 모든 페이지의 스크립트와 선택지에는 액션이 필요합니다.</p>
-                    <p>- 반드시 하나 이상의 시뮬레이션 종료 액션이 필요합니다.</p>
-                    <p>- 모든 스크립트는 시뮬레이션 종료 액션으로 이어질 수 있어야 합니다.</p>
-                    <p>- 음란물, 도배등 비정상적인 게시물은 삭제될 수 있습니다.</p>
+                    <p>
+                      - 모든 페이지의 스크립트와 선택지에는 액션이 필요합니다.
+                    </p>
+                    <p>
+                      - 반드시 하나 이상의 시뮬레이션 종료 액션이 필요합니다.
+                    </p>
+                    <p>
+                      - 모든 스크립트는 시뮬레이션 종료 액션으로 이어질 수
+                      있어야 합니다.
+                    </p>
+                    <p>
+                      - 음란물, 도배등 비정상적인 게시물은 삭제될 수 있습니다.
+                    </p>
                   </div>
                 </article>
                 <div className="field">
