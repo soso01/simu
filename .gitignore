@@ -31,3 +31,4 @@ yarn-error.log*
 /public/sitemap-3.xml
 /public/sitemap-4.xml
 /public/sitemap-index.xml
+/server/image/*
