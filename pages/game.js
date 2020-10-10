@@ -5,6 +5,7 @@ import Head from "next/head"
 import Modal from "../components/Modal"
 import { useRouter } from "next/router"
 import { now } from "moment"
+import AdfitWebComponent from "react-adfit-web-component"
 
 const game = ({ game, isPreview, togglePreview }) => {
   const router = useRouter()
@@ -53,18 +54,23 @@ const game = ({ game, isPreview, togglePreview }) => {
 
     //preload
     const script = pages[pageNum].script[scriptNum]
-    console.log(script)
-    if (script.action.actType === "movePage" && !preloadImageArr[script.action.num]) {
+    if (
+      script.action.actType === "movePage" &&
+      !preloadImageArr[script.action.num]
+    ) {
       let img = new Image()
       img.src = "/image/" + pages[script.action.num].img
-      setPreloadImageArr({...preloadImageArr, [script.action.num] : true})
+      setPreloadImageArr({ ...preloadImageArr, [script.action.num]: true })
     }
     if (script.select.length > 0) {
       script.select.forEach((select) => {
-        if (select.action.actType === "movePage" && !preloadImageArr[select.action.num]) {
+        if (
+          select.action.actType === "movePage" &&
+          !preloadImageArr[select.action.num]
+        ) {
           let img = new Image()
           img.src = "/image/" + pages[select.action.num].img
-          setPreloadImageArr({...preloadImageArr, [select.action.num] : true})
+          setPreloadImageArr({ ...preloadImageArr, [select.action.num]: true })
         }
       })
     }
