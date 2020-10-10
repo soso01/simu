@@ -9,7 +9,7 @@ import SearchBar from "../components/SearchBar"
 import MyCard from "../components/myCard"
 
 const mygame = () => {
-  const { sortBy, dateSort, searchName } = useContext(AppContext)
+  const { sortBy, dateSort, searchName, setSearchName } = useContext(AppContext)
   const [cookies, setCookies, removeCookies] = useCookies(["token"])
   const [games, setGames] = useState([])
   const [page, setPage] = useState(0)
@@ -73,6 +73,10 @@ const mygame = () => {
     window.addEventListener("scroll", _infiniteScroll, true)
     return () => window.removeEventListener("scroll", _infiniteScroll, true)
   }, [_infiniteScroll])
+
+  useEffect(() => {
+    setSearchName("")
+  },[])
 
   useEffect(() => {
     fetch()
