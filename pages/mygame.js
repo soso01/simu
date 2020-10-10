@@ -14,6 +14,7 @@ const mygame = () => {
   const [games, setGames] = useState([])
   const [page, setPage] = useState(0)
   const [count, setCount] = useState(0)
+  const [isClearSearchName, setIsClearSearchName] = useState(false)
 
   const getCount = async () => {
     const res = await axios.post("/game/getUserCount", {
@@ -76,12 +77,15 @@ const mygame = () => {
 
   useEffect(() => {
     setSearchName("")
+    setIsClearSearchName(true)
   },[])
 
   useEffect(() => {
-    fetch()
-    getCount()
-  }, [sortBy, searchName, dateSort])
+    if(isClearSearchName){
+      fetch()
+      getCount()
+    }
+  }, [sortBy, searchName, dateSort, isClearSearchName])
 
   return (
     <div>
