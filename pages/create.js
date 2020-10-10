@@ -10,7 +10,7 @@ const create = ({ isUpdate, data }) => {
   const [simData, setSimData] = useState({
     title: "",
     desc: "",
-    thumbnail: 0,
+    thumbnailNum: 0,
     pages: [
       {
         img: "",
@@ -24,6 +24,7 @@ const create = ({ isUpdate, data }) => {
       },
     ],
   })
+
   const [isLogin, setIsLogin] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const [isPreview, setIsPreview] = useState(false)
@@ -44,7 +45,7 @@ const create = ({ isUpdate, data }) => {
 
   useEffect(() => {
     if (isUpdate && data) {
-      setSimData({ ...data, thumbnail: 0 })
+      setSimData({ ...data })
     }
   }, [data])
 
@@ -180,7 +181,7 @@ const create = ({ isUpdate, data }) => {
 
                     <p className="title is-4 row">
                       페이지 {i + 1}
-                      {i === simData.thumbnail ? (
+                      {i === simData.thumbnailNum ? (
                         <button className="button is-info is-small ml-4">
                           현재 썸네일
                         </button>
@@ -188,7 +189,7 @@ const create = ({ isUpdate, data }) => {
                         <button
                           className="button is-success is-small ml-4"
                           onClick={() => {
-                            setSimData({ ...simData, thumbnail: i })
+                            setSimData({ ...simData, thumbnailNum: i })
                           }}
                         >
                           썸네일 설정

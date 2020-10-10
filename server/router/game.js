@@ -262,6 +262,7 @@ router.post("/create", jwtCheck, async (req, res) => {
     game.title = data.title
     game.desc = data.desc
     game.pages = data.pages
+    game.thumbnailNum = data.thumbnailNum
   } else {
     game = await Game.create({
       ...data,
@@ -271,7 +272,7 @@ router.post("/create", jwtCheck, async (req, res) => {
   }
   //썸네일 생성
   game.thumbnail = await createThumbnail(
-    data.pages[data.thumbnail].img,
+    data.pages[data.thumbnailNum].img,
     game._id
   )
   await game.save()

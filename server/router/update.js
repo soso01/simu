@@ -8,7 +8,7 @@ const router = express()
 router.post("/getData", jwtCheck, async (req, res) => {
   const {seq} = req.body
   const game = await Game.findOne({seq})
-  if(req.user.id === game.userId){
+  if(req.user && req.user.id === game.userId){
     res.json(game)
   }
   else {

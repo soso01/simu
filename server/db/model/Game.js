@@ -1,5 +1,6 @@
 var mongoose = require("mongoose")
 const autoIncrement = require("mongoose-auto-increment")
+const { stringify } = require("uuid")
 var Schema = mongoose.Schema
 
 autoIncrement.initialize(mongoose.connection)
@@ -10,6 +11,7 @@ var gameSchema = new Schema({
   nickName: { type: String, required: true },
   title: { type: String, required: true },
   desc: { type: String, required: true },
+  thumbnailNum: { type: Number, default: 0},
   thumbnail: { type: String, default: 0 },
   count: { type: Number, default: 0 },
   created: { type: Date, default: Date.now },
