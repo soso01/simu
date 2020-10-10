@@ -60,7 +60,7 @@ const game = ({ game, isPreview, togglePreview }) => {
     ) {
       let img = new Image()
       img.src = "/image/" + pages[script.action.num].img
-      setPreloadImageArr({ ...preloadImageArr, [script.action.num]: true })
+      setPreloadImageArr({ ...preloadImageArr, [script.action.num]: img })
     }
     if (script.select.length > 0) {
       script.select.forEach((select) => {
@@ -70,7 +70,7 @@ const game = ({ game, isPreview, togglePreview }) => {
         ) {
           let img = new Image()
           img.src = "/image/" + pages[select.action.num].img
-          setPreloadImageArr({ ...preloadImageArr, [select.action.num]: true })
+          setPreloadImageArr({ ...preloadImageArr, [select.action.num]: img })
         }
       })
     }
