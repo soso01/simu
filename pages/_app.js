@@ -39,6 +39,17 @@ export default function MyApp({ Component, pageProps }) {
               `,
             }}
           />
+          <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+          <script
+            dangerouslySetInnerHTML={{
+              __html: `
+              (adsbygoogle = window.adsbygoogle || []).push({
+                google_ad_client: "ca-pub-7372890615325253",
+                enable_page_level_ads: true
+              });
+              `,
+            }}
+          />
           <link rel="icon" href="/favicon.ico" />
           <meta
             name="viewport"
