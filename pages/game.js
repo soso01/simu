@@ -19,6 +19,7 @@ const game = ({ game, isPreview, togglePreview }) => {
   const [scriptNum, setScriptNum] = useState(0)
   const [scriptText, setScriptText] = useState("")
   const [printText, setPrintText] = useState("")
+  const [preloadImageArr, setPreloadImageArr] = useState({})
   const [nowScript, setNowScript] = useState(pages[pageNum].script[scriptNum])
 
   let addLetter
@@ -45,18 +46,28 @@ const game = ({ game, isPreview, togglePreview }) => {
     }
   }
 
-  //image preload
-  useEffect(() => {
-    pages.forEach(v => {
-      let img = new Image(); 
-      img.src = "/image/" + v.img;
-    })
-  }, [pages])
-
   useEffect(() => {
     setPrintText("")
     setNowScript(pages[pageNum].script[scriptNum])
     setScriptText(pages[pageNum].script[scriptNum].text)
+
+    //preload
+    const script = pages[pageNum].script[scriptNum]
+    console.log(script)
+    if (script.action.actType === "movePage" && !preloadImageArr[script.action.num]) {
+      let img = new Image()
+      img.src = "/image/" + pages[script.action.num].img
+      setPreloadImageArr({...preloadImageArr, [script.action.num] : true})
+    }
+    if (script.select.length > 0) {
+      script.select.forEach((select) => {
+        if (select.action.actType === "movePage" && !preloadImageArr[select.action.num]) {
+          let img = new Image()
+          img.src = "/image/" + pages[select.action.num].img
+          setPreloadImageArr({...preloadImageArr, [select.action.num] : true})
+        }
+      })
+    }
   }, [pageNum, scriptNum])
 
   useEffect(() => {
@@ -143,12 +154,15 @@ const game = ({ game, isPreview, togglePreview }) => {
         <section className="hero is-dark is-bold is-fullheight-with-navbar">
           <div className="hero-body">
             <div className="container is-fullheight" style={{ height: "100%" }}>
+              {/* 이미지 */}
               <div className="game-img-box">
                 <img
                   className="game-img"
                   src={"/image/" + pages[pageNum].img}
                 ></img>
               </div>
+
+              {/* 텍스트 */}
               <div
                 className="game-text-box ml-1 mr-1 is-size-5"
                 onClick={gameTextClick}
