@@ -139,6 +139,7 @@ const create = ({ isUpdate, data }) => {
                     <p>도움말</p>
                   </div>
                   <div className="message-body">
+                    <p>- <a href="https://simu.kr/game/2" target="_blank">글쓰기 튜토리얼 링크</a></p>
                     <p>- 페이지 : 이미지 단위의 구분</p>
                     <p>- 스크립트 : 같은 페이지 내의 텍스트의 구분</p>
                     <p>- 모든 페이지에는 이미지가 반드시 필요합니다.</p>
@@ -153,7 +154,7 @@ const create = ({ isUpdate, data }) => {
                       있어야 합니다.
                     </p>
                     <p>
-                      - 음란물, 도배등 비정상적인 게시물은 삭제될 수 있습니다.
+                      - 성적 표현이 있거나, 도배등 비정상적인 게시물은 통보없이 삭제될 수 있습니다.
                     </p>
                   </div>
                 </article>
