@@ -27,6 +27,7 @@ const game = ({ game, isPreview, togglePreview }) => {
 
   const runAction = (action) => {
     if (action.actType === "movePage") {
+      setScriptNum(0)
       setPageNum(action.num)
     } else if (action.actType === "moveScript") {
       setScriptNum(action.num)
