@@ -128,7 +128,7 @@ const comment = ({ game, initBest, initComments, count }) => {
     alert(res.data.msg)
   }
 
-  if(!game){
+  if (!game) {
     return <div>Not found</div>
   }
 
@@ -210,7 +210,13 @@ const comment = ({ game, initBest, initComments, count }) => {
                   </div>
                 </div>
                 <div className="container pt-3 pb-3">
-                  <div className="notification">{game.desc}</div>
+                  <div className="notification">
+                    {game.desc.split("\n").map((v, i) => (
+                      <span key={i}>
+                        {v} <br />
+                      </span>
+                    ))}
+                  </div>
                 </div>
 
                 <p className="is-size-5 has-text-weight-semibold has-text-centered pt-3 pb-3">
