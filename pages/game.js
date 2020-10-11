@@ -82,7 +82,7 @@ const game = ({ game, isPreview, togglePreview }) => {
       addLetter = setTimeout(() => {
         setPrintText(printText + scriptText[0])
         setScriptText(scriptText.slice(1))
-      }, 50)
+      }, 70)
     }
   }, [scriptText, isStartModal])
 
