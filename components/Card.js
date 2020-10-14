@@ -26,13 +26,15 @@ const Card = ({ data }) => {
         </div>
         <div className="card-content">
           <div className="content">
-            <span className="title is-4">{data.title}</span>
+              <a href={"/game/" + data.seq} className="title is-4">{data.title}</a>
           </div>
 
           <div className="content">
             {slicedDesc}
             <br />
-            <time dateTime="2016-1-1">{moment(data.created).format("LLL")}</time>
+            <time dateTime="2016-1-1">
+              {moment(data.created).format("LLL")}
+            </time>
           </div>
         </div>
 

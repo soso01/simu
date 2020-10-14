@@ -6,12 +6,11 @@ const jwtCheck = require("../lib/jwtCheck")
 const router = express()
 
 router.post("/getData", jwtCheck, async (req, res) => {
-  const {seq} = req.body
-  const game = await Game.findOne({seq})
-  if(req.user && req.user.id === game.userId){
+  const { seq } = req.body
+  const game = await Game.findOne({ seq })
+  if (req.user && (req.user.isAdmin || req.user.id === game.userId)) {
     res.json(game)
-  }
-  else {
+  } else {
     res.send("fail")
   }
 })

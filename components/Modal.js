@@ -1,7 +1,14 @@
 import React, { useState } from "react"
 
-const Modal = ({ active, onClickFunc, title, content, buttonText }) => {
-
+const Modal = ({
+  active,
+  onClickFunc,
+  title,
+  content,
+  buttonText,
+  restartText,
+  restartFunc,
+}) => {
   return (
     <div className={"modal " + (active && "is-active")}>
       <div className="modal-background" onClick={onClickFunc}></div>
@@ -14,10 +21,22 @@ const Modal = ({ active, onClickFunc, title, content, buttonText }) => {
             onClick={onClickFunc}
           ></button>
         </header>
-        <section className="modal-card-body" style={{wordBreak:"break-word"}}>
-          {content.split('\n').map((v, i) => <span key={i}>{v} <br /></span>)}
+        <section
+          className="modal-card-body"
+          style={{ wordBreak: "break-word" }}
+        >
+          {content.split("\n").map((v, i) => (
+            <span key={i}>
+              {v} <br />
+            </span>
+          ))}
         </section>
         <footer className="modal-card-foot row">
+          {restartText && (
+            <button className="button is-success" onClick={restartFunc}>
+              {restartText}
+            </button>
+          )}
           <button className="button" onClick={onClickFunc}>
             {buttonText}
           </button>

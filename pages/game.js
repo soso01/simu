@@ -153,6 +153,12 @@ const game = ({ game, isPreview, togglePreview }) => {
             "응원댓글은 시뮬레이션 제작자에게 큰 힘이됩니다!\n" +
             "재미있었다면 링크를 공유해주세요!\n"
           }
+          restartText="다시하기"
+          restartFunc={() => {
+            setPageNum(0)
+            setScriptNum(0)
+            setIsEndModal(false)
+          }}
           buttonText="종료"
           onClickFunc={() =>
             isPreview ? togglePreview() : router.push("/comment/" + game.seq)
