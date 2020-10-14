@@ -15,6 +15,7 @@ const mygame = () => {
   const [page, setPage] = useState(0)
   const [count, setCount] = useState(0)
   const [isClearSearchName, setIsClearSearchName] = useState(false)
+  const [canMore, setCanMore] = useState(false)
 
   const getCount = async () => {
     const res = await axios.post("/game/getUserCount", {
@@ -23,6 +24,7 @@ const mygame = () => {
       token: cookies.token,
     })
     setCount(res.data.count)
+    if ((page + 1) * 10 < res.data.count) setCanMore(true)
   }
 
   const fetch = async () => {
@@ -78,14 +80,18 @@ const mygame = () => {
   useEffect(() => {
     setSearchName("")
     setIsClearSearchName(true)
-  },[])
+  }, [])
 
   useEffect(() => {
-    if(isClearSearchName){
+    if (isClearSearchName) {
       fetch()
       getCount()
     }
   }, [sortBy, searchName, dateSort, isClearSearchName])
+
+  useEffect(() => {
+    if (page * 10 >= count) setCanMore(false)
+  }, [page])
 
   return (
     <div>
@@ -109,6 +115,14 @@ const mygame = () => {
           {games.map((v, i) => (
             <MyCard key={i} data={v} />
           ))}
+          {canMore && (
+            <button
+              className="button is-fullwidth is-info is-light mb-5"
+              onClick={moreGames}
+            >
+              더 보기
+            </button>
+          )}
         </div>
       </main>
     </div>

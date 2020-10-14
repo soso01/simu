@@ -8,7 +8,7 @@ import moment from "moment"
 import "moment/locale/ko"
 moment.locale("kr")
 
-const limitNum = 10
+const limitNum = 2
 
 const comment = ({ game, initBest, initComments, count }) => {
   const [cookies, setCookies, removeCookies] = useCookies(["token"])
@@ -17,6 +17,7 @@ const comment = ({ game, initBest, initComments, count }) => {
   const [comments, setComments] = useState(initComments)
   const [best, setBest] = useState(initBest)
   const [page, setPage] = useState(1)
+  const [canMore, setCanMore] = useState(page * limitNum < count)
 
   const _infiniteScroll = () => {
     let scrollHeight = Math.max(
@@ -60,6 +61,12 @@ const comment = ({ game, initBest, initComments, count }) => {
     setComments([...comments, ...res.data])
     window.scrollTo({ top: scrollTop })
   }
+
+  useEffect(() => {
+    if (page * limitNum > count) {
+      setCanMore(false)
+    }
+  }, [page])
 
   const submitComment = async () => {
     const res = await axios.post("/comment/addComment", {
@@ -336,6 +343,15 @@ const comment = ({ game, initBest, initComments, count }) => {
                     </div>
                   </article>
                 ))}
+
+                {canMore && (
+                  <button
+                    className="button is-fullwidth is-info is-light mt-5 mb-5"
+                    onClick={() => moreComment(limitNum)}
+                  >
+                    더 보기
+                  </button>
+                )}
               </div>
             </div>
           </div>

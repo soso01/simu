@@ -105,6 +105,7 @@ router.post("/delete", jwtCheck, async (req, res) => {
 
 router.post("/getMoreComments", async (req, res) => {
   const { seq, page, limitNum } = req.body
+  console.log(req.body)
   const comments = await Comment.find(
     { gameSeq: seq, accuseCount: { $lte: 5 } },
     "userNickname _id text recommendCount created userId"
