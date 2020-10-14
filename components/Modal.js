@@ -33,7 +33,7 @@ const Modal = ({
         </section>
         <footer className="modal-card-foot row">
           {restartText && (
-            <button className="button is-success" onClick={restartFunc}>
+            <button className="button" onClick={restartFunc}>
               {restartText}
             </button>
           )}

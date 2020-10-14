@@ -140,12 +140,12 @@ const checkGameValid = (data) => {
                 "번 페이지의 " +
                 (si + 1) +
                 "번 스크립트" +
-                (script_i + 1) +
+                (select_i + 1) +
                 "번 선택지의 액션이 설정되지 않았습니다.",
             }
           else if (
             select.action.actType === "movePage" &&
-            (select.action.num >= data.pages.length || script.action.num === null)
+            (select.action.num >= data.pages.length || select.action.num === null)
           ) {
             return {
               result: "fail",
@@ -155,12 +155,12 @@ const checkGameValid = (data) => {
                 "번 페이지의 " +
                 (si + 1) +
                 "번 스크립트 " +
-                (script_i + 1) +
+                (select_i + 1) +
                 "번 선택지 액션의 번호를 다시 설정해주세요.",
             }
           } else if (
             select.action.actType === "moveScript" &&
-            (select.action.num >= page.script.length || script.action.num === null)
+            (select.action.num >= page.script.length || select.action.num === null)
           ) {
             return {
               result: "fail",
@@ -170,7 +170,7 @@ const checkGameValid = (data) => {
                 "번 페이지의 " +
                 (si + 1) +
                 "번 스크립트 " +
-                (script_i + 1) +
+                (select_i + 1) +
                 "번 선택지 액션의 번호를 다시 설정해주세요.",
             }
           }
