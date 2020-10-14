@@ -26,7 +26,9 @@ const Card = ({ data }) => {
         </div>
         <div className="card-content">
           <div className="content">
-              <a href={"/game/" + data.seq} className="title is-4">{data.title}</a>
+            <Link href={"/game/" + data.seq}>
+              <a className="title is-4">{data.title}</a>
+            </Link>
           </div>
 
           <div className="content">
