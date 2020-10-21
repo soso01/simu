@@ -56,7 +56,7 @@ router.post("/", async (req, res) => {
     res.send("fail")
   } else {
     const token = jwt.sign({ id }, jwtSecret, {
-      expiresIn: longExp ? "30d" : "1d",
+      expiresIn: longExp ? "30d" : "7d",
     })
     res.json(token)
   }

@@ -6,6 +6,7 @@ import Head from "next/head"
 import Router from "next/router"
 import moment from "moment"
 import "moment/locale/ko"
+import Link from "next/link"
 moment.locale("kr")
 
 const limitNum = 2
@@ -234,7 +235,12 @@ const comment = ({ game, initBest, initComments, count }) => {
                   style={{ display: "flex", justifyContent: "center" }}
                 >
                   <p className="control">
-                    <button className="button is-link" onClick={recommendGame}>
+                    <Link href={"/game/" + game.seq}>
+                      <a className="button is-link">다시하기</a>
+                    </Link>
+                  </p>
+                  <p className="control">
+                    <button className="button is-primary" onClick={recommendGame}>
                       추천하기
                     </button>
                   </p>
