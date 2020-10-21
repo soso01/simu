@@ -27,6 +27,7 @@ const create = ({ isUpdate, data }) => {
   const [isLogin, setIsLogin] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const [isPreview, setIsPreview] = useState(false)
+  const [isPrivate, setIsPrivate] = useState(false)
   const [cookies, setCookies, removeCookies] = useCookies(["token"])
 
   useEffect(() => {
@@ -78,6 +79,7 @@ const create = ({ isUpdate, data }) => {
   const submit = async () => {
     const res = await axios.post("/game/create", {
       data: simData,
+      isPrivate,
       token: cookies.token,
       isUpdate,
     })
@@ -139,7 +141,12 @@ const create = ({ isUpdate, data }) => {
                     <p>도움말</p>
                   </div>
                   <div className="message-body">
-                    <p>- <a href="https://simu.kr/game/2" target="_blank">글쓰기 튜토리얼 링크</a></p>
+                    <p>
+                      -{" "}
+                      <a href="https://simu.kr/game/2" target="_blank">
+                        글쓰기 튜토리얼 링크
+                      </a>
+                    </p>
                     <p>- 페이지 : 이미지 단위의 구분</p>
                     <p>- 스크립트 : 같은 페이지 내의 텍스트의 구분</p>
                     <p>- 모든 페이지에는 이미지가 반드시 필요합니다.</p>
@@ -154,7 +161,11 @@ const create = ({ isUpdate, data }) => {
                       있어야 합니다.
                     </p>
                     <p>
-                      - 성적 표현이 있거나, 도배등 비정상적인 게시물은 통보없이 삭제될 수 있습니다.
+                      - 성적 표현이 있거나, 도배등 비정상적인 게시물은 통보없이
+                      삭제될 수 있습니다.
+                    </p>
+                    <p>
+                      - 비공개 글 등록 기능으로 작성 틈틈이 임시저장해주세요.
                     </p>
                   </div>
                 </article>
@@ -518,19 +529,39 @@ const create = ({ isUpdate, data }) => {
                     페이지 추가
                   </button>
                 </div>
-                <div className="field row mt-6 mb-6">
-                  <div className="control">
-                    <button className="button is-link mr-2" onClick={submit}>
-                      {isUpdate ? "수정하기" : "생성하기"}
-                    </button>
+
+                <div className="field mt-6 mb-6">
+                  <div className="control row mb-2">
+                    <span className="mt-2 mr-2"> 공개 여부 : </span>
+                    <div className="select">
+                      <select
+                        value={isPrivate}
+                        onChange={(e) => {
+                          setIsPrivate(e.target.value)
+                        }}
+                      >
+                        <option value={false}>공개</option>
+                        <option value={true}>비공개</option>
+                      </select>
+                    </div>
                   </div>
-                  <div className="control">
-                    <button
-                      className="button is-link is-light ml-2"
-                      onClick={() => setIsPreview(!isPreview)}
-                    >
-                      미리보기
-                    </button>
+                  <div className="row">
+                    <div className="control">
+                      <button
+                        className="button is-link mr-2"
+                        onClick={() => submit()}
+                      >
+                        {isUpdate ? "수정하기" : "생성하기"}
+                      </button>
+                    </div>
+                    <div className="control">
+                      <button
+                        className="button is-link is-light ml-2"
+                        onClick={() => setIsPreview(!isPreview)}
+                      >
+                        미리보기
+                      </button>
+                    </div>
                   </div>
                 </div>
               </div>

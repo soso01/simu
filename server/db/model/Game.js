@@ -19,6 +19,7 @@ var gameSchema = new Schema({
   accuser: [String],
   recommendCount: {type: Number, default: 0},
   recommender: [String],
+  isPrivate: {type: Boolean, default: false},
   pages: [
     {
       img: String,

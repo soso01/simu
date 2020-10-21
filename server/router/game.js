@@ -9,25 +9,31 @@ const { Game, Image, Comment } = require("../db/model")
 const jwtCheck = require("../lib/jwtCheck")
 
 const createThumbnail = async (originalName, gameId) => {
-  const thumbName =
-    "thumb_" + path.basename(originalName, path.extname(originalName)) + ".webp"
-  const thumbExist = await Image.findOne({ name: thumbName })
-  if (!thumbExist) {
-    const originalImage = await Image.findOne({ name: originalName })
-    sharp(
-      path.normalize(
-        __dirname + "/../image/" + originalImage.path + originalName
-      )
-    )
-      .resize(600, 600)
-      .toFile(
+  try {
+    const thumbName =
+      "thumb_" +
+      path.basename(originalName, path.extname(originalName)) +
+      ".webp"
+    const thumbExist = await Image.findOne({ name: thumbName })
+    if (!thumbExist) {
+      const originalImage = await Image.findOne({ name: originalName })
+      sharp(
         path.normalize(
-          __dirname + "/../image/" + originalImage.path + thumbName
+          __dirname + "/../image/" + originalImage.path + originalName
         )
       )
-    await Image.create({ name: thumbName, path: originalImage.path, gameId })
+        .resize(600, 600)
+        .toFile(
+          path.normalize(
+            __dirname + "/../image/" + originalImage.path + thumbName
+          )
+        )
+      await Image.create({ name: thumbName, path: originalImage.path, gameId })
+    }
+    return thumbName
+  } catch {
+    return null
   }
-  return thumbName
 }
 
 const clearVisit = (data) => {
@@ -115,7 +121,8 @@ const checkGameValid = (data) => {
           }
         } else if (
           script.action.actType === "moveScript" &&
-          (script.action.num >= page.script.length || script.action.num === null)
+          (script.action.num >= page.script.length ||
+            script.action.num === null)
         ) {
           return {
             result: "fail",
@@ -145,7 +152,8 @@ const checkGameValid = (data) => {
             }
           else if (
             select.action.actType === "movePage" &&
-            (select.action.num >= data.pages.length || select.action.num === null)
+            (select.action.num >= data.pages.length ||
+              select.action.num === null)
           ) {
             return {
               result: "fail",
@@ -160,7 +168,8 @@ const checkGameValid = (data) => {
             }
           } else if (
             select.action.actType === "moveScript" &&
-            (select.action.num >= page.script.length || select.action.num === null)
+            (select.action.num >= page.script.length ||
+              select.action.num === null)
           ) {
             return {
               result: "fail",
@@ -251,10 +260,12 @@ router.post("/delete", jwtCheck, async (req, res) => {
 
 router.post("/create", jwtCheck, async (req, res) => {
   if (!req.user) res.send({ result: "fail", msg: "로그인이 필요합니다." })
-  const { data, isUpdate } = req.body
+  const { data, isUpdate, isPrivate } = req.body
 
-  const validCheck = checkGameValid(data)
-  if (validCheck.result === "fail") return res.json(validCheck)
+  if (!isPrivate) {
+    const validCheck = checkGameValid(data)
+    if (validCheck.result === "fail") return res.json(validCheck)
+  }
 
   let game
   if (isUpdate) {
@@ -263,11 +274,13 @@ router.post("/create", jwtCheck, async (req, res) => {
     game.desc = data.desc
     game.pages = data.pages
     game.thumbnailNum = data.thumbnailNum
+    game.isPrivate = isPrivate
   } else {
     game = await Game.create({
       ...data,
       userId: req.user.id,
       nickName: req.user.nickName,
+      isPrivate,
     })
   }
   //썸네일 생성
@@ -359,11 +372,11 @@ router.post("/getAccusedGames", jwtCheck, async (req, res) => {
   res.json(games)
 })
 
-router.post("/clearAccuseGame", jwtCheck, async ( req, res ) => {
+router.post("/clearAccuseGame", jwtCheck, async (req, res) => {
   if (!req.user || !req.user.isAdmin) {
     return res.send({})
   }
-  await Game.findOneAndUpdate({_id : req.body._id}, {accuseCount: -10})
+  await Game.findOneAndUpdate({ _id: req.body._id }, { accuseCount: -10 })
   res.send("success")
 })
 
@@ -379,7 +392,10 @@ router.post("/getGame", async (req, res) => {
 
 router.post("/getList", async (req, res) => {
   const { sortBy, dateSort, searchName, page } = req.body
-  const filter = makeFilter({ dateSort, searchName })
+  const filter = {
+    ...makeFilter({ dateSort, searchName }),
+    isPrivate: { $ne: true },
+  }
 
   const games = await Game.find(filter)
     .select("title desc nickName thumbnail created seq")
