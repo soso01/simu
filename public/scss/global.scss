@@ -45,6 +45,12 @@
   background-color: gray;
   margin-top: 10px;
 
+  -ms-user-select: none; 
+  -moz-user-select: -moz-none;
+  -khtml-user-select: none;
+  -webkit-user-select: none;
+  user-select: none;
+
   overflow-y: scroll;
   &::-webkit-scrollbar {
     display: none;
