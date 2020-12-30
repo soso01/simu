@@ -26,6 +26,7 @@ app.prepare().then(() => {
   server.use("/game", require("./router/game"))
   server.use("/comment", require("./router/comment"))
   server.use("/update", require("./router/update"))
+  server.use("/stock", require('./router/Stock'))
 
   createSiteMap()
 
@@ -33,13 +34,6 @@ app.prepare().then(() => {
     key: privateKey,
     cert: certificate,
   }
-
-  //stockApp 전용
-  server.post("/getStock", async (req, res) => {
-    const { symbol } = req.body
-    const stock = await Stock.findOne({ symbol })
-    res.json(stock)
-  })
 
   server.get("*", (req, res) => {
     return handle(req, res)

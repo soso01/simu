@@ -1,4 +1,5 @@
 var mongoose = require("mongoose")
+const stockDB = require('./stockDB')
 var Schema = mongoose.Schema
 
 var stockSchema = new Schema({
@@ -13,4 +14,4 @@ var stockSchema = new Schema({
   }
 })
 
-module.exports = mongoose.model("stock", stockSchema)
+module.exports = stockDB.model("stock", stockSchema)
