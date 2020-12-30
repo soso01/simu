@@ -34,6 +34,13 @@ app.prepare().then(() => {
     cert: certificate,
   }
 
+  //stockApp 전용
+  server.post("/getStock", async (req, res) => {
+    const { symbol } = req.body
+    const stock = await Stock.findOne({ symbol })
+    res.json(stock)
+  })
+
   server.get("*", (req, res) => {
     return handle(req, res)
   })
