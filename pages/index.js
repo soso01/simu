@@ -94,7 +94,7 @@ const Home = () => {
         ></meta>
         <meta
           property="og:description"
-          content="만화 아이돌 애니 드라마 미연시 빙의글 등 각종 장르의 팬픽 시뮬레이션 게임을 제공하는 사이트입니다."
+          content="만화 아이돌 애니 드라마 미연시 등 각종 장르의 팬픽 시뮬레이션 게임을 제공하는 사이트입니다."
         ></meta>
 
         <meta name="twitter:card" content="summary"></meta>
@@ -104,7 +104,7 @@ const Home = () => {
         ></meta>
         <meta
           name="twitter:description"
-          content="만화 아이돌 애니 드라마 미연시 등 빙의글 각종 장르의 팬픽 시뮬레이션 게임을 제공하는 사이트입니다."
+          content="만화 아이돌 애니 드라마 미연시 등 각종 장르의 팬픽 시뮬레이션 게임을 제공하는 사이트입니다."
         ></meta>
         <meta name="twitter:domain" content="https://simu.kr/"></meta>
         <link rel="icon" href="/favicon.ico" />
